@@ -432,6 +432,12 @@ class _MainMapState extends State<MainMap> {
   }
 
 
+
+   RunAllTime(){
+
+   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -585,7 +591,6 @@ class _MainMapState extends State<MainMap> {
                                {
                                  if(d.res.latlng.length>0)
                                    {
-
                                      var newPosition = CameraPosition(
                                          target: LatLng(d.res.latlng[0].lat,d.res.latlng[0].lng),
                                          zoom: 16);
@@ -594,8 +599,6 @@ class _MainMapState extends State<MainMap> {
                                        print('element.toString()');
                                        _cordinate.add(LatLng(element.lat,element.lng));
                                      });
-
-
                                      _poly.add(
                                          Polyline(
                                            polylineId: PolylineId("route1"),
@@ -608,8 +611,6 @@ class _MainMapState extends State<MainMap> {
                                            points: _cordinate,
                                          )
                                      );
-
-
                                      d.res.latlng.forEach((element)
                                      {
                                        _Markers.add(
@@ -630,13 +631,11 @@ class _MainMapState extends State<MainMap> {
 
                                      });
                                    }
-
                                }
-
-
+                             }else{
+                               ApiService.ShowSnackbar('موقعیت مکانی وجود ندارد');
                              }
                           }
-
                         },
                         child: TextField(
                           enabled: false,
@@ -723,7 +722,9 @@ class _MainMapState extends State<MainMap> {
   }
 }
 
-class TypingMap extends StatelessWidget {
+
+
+ class TypingMap extends StatelessWidget {
 
   int i;
   int group;
@@ -753,8 +754,7 @@ class TypingMap extends StatelessWidget {
     );
   }
 }
-
-class RowInfo extends StatelessWidget {
+ class RowInfo extends StatelessWidget {
    IconData Icon2;
 
    String Title;
@@ -786,8 +786,7 @@ class RowInfo extends StatelessWidget {
     );
   }
 }
-
-class BoxSwitch extends StatelessWidget {
+ class BoxSwitch extends StatelessWidget {
    String  Lable;
    bool Active;
    BoxSwitch(this.Lable,this.Active);

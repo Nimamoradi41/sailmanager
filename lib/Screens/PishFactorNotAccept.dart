@@ -54,11 +54,16 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
       }else{
       ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
     }
+
+
+
+
+       pr.hide();
   }
 
 
 
-  Future GetDataRef()async{
+  Future<Null> GetDataRef()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var base =prefs.getString('Baseurl');
     var UserName =prefs.getString('UserName');
@@ -82,9 +87,15 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
     }else{
       ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
     }
+
+
+
+    pr.hide();
   }
 
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
 
 
 
@@ -100,6 +111,7 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
 
     });
   }
+
   String creationDateStart='';
   String creationDateEnd='';
   @override
@@ -108,12 +120,12 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
     super.initState();
      GetData();
   }
-  Updata_creationDateStart(String s){
+  Updata_creationDateStart(String s,String s2){
     setState(() {
       creationDateStart=s;
     });
   }
-  Updata_creationDateEnd(String s){
+  Updata_creationDateEnd(String s,String s2){
     setState(() {
       creationDateEnd=s;
     });
@@ -202,117 +214,146 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                 ),
                 Expanded(
                   child:
-                      MyData.length>0?
-                  ListView.builder(
-                    itemCount: MyData.length,
-                    itemBuilder: (ctx,item){
-                      return GestureDetector(
-                        onTap: () async{
-                       var Date= await      Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context)
-                                  => DetailPishFactor(MyData[item].id.toString(),MyData[item])));
-                          if(Date!=null)
-                            {
-                              MyData.removeAt(item);
-                              setState(() {
+                     Stack(
+                       children: [
+                         RefreshIndicator(
+                             key: _refreshIndicatorKey,
+                             onRefresh: GetDataRef,
+                             // onRefresh: ()async{
+                             //   GetDataRef();
+                             // },
+                             // child:  MyData.length>0?
+                             child:
+                             Column(
+                               children: [
+                                 Expanded(
+                                     child:
+                                     ListView.builder(
+                                       itemCount: MyData.length,
+                                       // itemCount: 20,
+                                       itemBuilder: (ctx,item){
+                                         return GestureDetector(
+                                           onTap: () async{
+                                             var Date= await      Navigator.of(context).push(
+                                                 MaterialPageRoute(
+                                                     builder: (context)
+                                                     => DetailPishFactor(MyData[item].id.toString(),MyData[item])));
+                                             if(Date!=null)
+                                             {
+                                               MyData.removeAt(item);
+                                               setState(() {
 
-                              });
-                            }
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: BaseColor.withOpacity(0.25),
-                                    spreadRadius: 2,
-                                    blurRadius: 8
-                                )
-                              ]
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
-                            child: Column(
-                              children: [
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          flex: 25,
-                                          child: BoxInfo_3('تاریخ',MyData[item].date)),
-                                      Container(
-                                        width: 2,
-                                        height: Sizewid*1/7,
-                                        color: ColorLine,
-                                      ),
-                                      Expanded(
-                                          flex: 75,
-                                          child:
-                                          BoxInfo_Right('نام مشتری',MyData[item].customerName)
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                                  height: 2,
-                                  width: double.infinity,
-                                  color: ColorLine,
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(child: BoxInfo_3('مبلغ',MyData[item].payment)),
-                                    Container(
-                                      width: 2,
-                                      height: Sizewid*1/7,
-                                      color: ColorLine,
-                                    ),
-                                    Expanded(child: BoxInfo_3('کل',MyData[item].tedJoz)),
-                                    Container(
-                                      width: 2,
-                                      height: Sizewid*1/7,
-                                      color: ColorLine,
-                                    ),
-                                    Expanded(child: BoxInfo_3('جز',MyData[item].tedJoz)),
-                                    Container(
-                                      width: 2,
-                                      height: Sizewid*1/7,
-                                      color: ColorLine,
-                                    ),
-                                    Expanded(child: BoxInfo_3('واحد',MyData[item].tedVah)),
+                                               });
+                                             }
+                                           },
+                                           child: Container(
+                                             width: double.infinity,
+                                             margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                             decoration: BoxDecoration(
+                                                 color: Colors.white,
+                                                 borderRadius: BorderRadius.circular(16),
+                                                 boxShadow: [
+                                                   BoxShadow(
+                                                       color: BaseColor.withOpacity(0.25),
+                                                       spreadRadius: 2,
+                                                       blurRadius: 8
+                                                   )
+                                                 ]
+                                             ),
+                                             child: Padding(
+                                               padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
+                                               child: Column(
+                                                 children: [
+                                                   Container(
+                                                     child: Row(
+                                                       children: [
+                                                         Expanded(
+                                                             flex: 25,
+                                                             child: BoxInfo_3('تاریخ',MyData[item].date)),
+                                                         Container(
+                                                           width: 2,
+                                                           height: Sizewid*1/7,
+                                                           color: ColorLine,
+                                                         ),
+                                                         Expanded(
+                                                             flex: 75,
+                                                             child:
+                                                             BoxInfo_Right('نام مشتری',MyData[item].customerName)
+                                                         )
+                                                       ],
+                                                     ),
+                                                   ),
+                                                   Container(
+                                                     margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                                     height: 2,
+                                                     width: double.infinity,
+                                                     color: ColorLine,
+                                                   ),
+                                                   Row(
+                                                     children: [
+                                                       Expanded(child: BoxInfo_3('مبلغ',MyData[item].payment)),
+                                                       Container(
+                                                         width: 2,
+                                                         height: Sizewid*1/7,
+                                                         color: ColorLine,
+                                                       ),
+                                                       Expanded(child: BoxInfo_3('کل',MyData[item].tedJoz)),
+                                                       Container(
+                                                         width: 2,
+                                                         height: Sizewid*1/7,
+                                                         color: ColorLine,
+                                                       ),
+                                                       Expanded(child: BoxInfo_3('جز',MyData[item].tedJoz)),
+                                                       Container(
+                                                         width: 2,
+                                                         height: Sizewid*1/7,
+                                                         color: ColorLine,
+                                                       ),
+                                                       Expanded(child: BoxInfo_3('واحد',MyData[item].tedVah)),
 
-                                  ],
-                                )
-                              ],
-                            ),
-                          ) ,
-                        ),
-                      );
-                    },
-                  ):
-                      Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 24.0),
-                              child: Text('محتوایی برای نمایش وجود ندارد',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: SizeFirst,
-                                    fontWeight: FontWeight.bold,
-                                    color: BaseColor
-                                ),),
-                            ),
-                          ],
-                        ),
-                      ),
+                                                     ],
+                                                   )
+                                                 ],
+                                               ),
+                                             ) ,
+                                           ),
+                                         );
+                                         return  Container(color: Colors.red, margin: EdgeInsets.all(8),height: 250);
+                                       },
+                                     )
+
+                                 ),
+
+                               ],
+                             )
+
+
+                         ),
+                          MyData.length==0?
+                         Center(
+                           child: Column(
+                             crossAxisAlignment: CrossAxisAlignment.center,
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: [
+                               SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
+                               Padding(
+                                 padding: const EdgeInsets.symmetric(vertical: 24.0),
+                                 child: Text('محتوایی برای نمایش وجود ندارد',
+                                   textAlign: TextAlign.center,
+                                   style: TextStyle(
+                                       fontSize: SizeFirst,
+                                       fontWeight: FontWeight.bold,
+                                       color: BaseColor
+                                   ),),
+                               ),
+                             ],
+                           ),
+                         ):Container(),
+
+                       ],
+
+                     )
+
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

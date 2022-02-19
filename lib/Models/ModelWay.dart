@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final custGroup = custGroupFromJson(jsonString);
+//     final modelWay = modelWayFromJson(jsonString);
 
 import 'dart:convert';
 
-CustGroup2 custGroupFromJson(String str) => CustGroup2.fromJson(json.decode(str));
+ModelWay modelWayFromJson(String str) => ModelWay.fromJson(json.decode(str));
 
-String custGroupToJson(CustGroup2 data) => json.encode(data.toJson());
+String modelWayToJson(ModelWay data) => json.encode(data.toJson());
 
-class CustGroup2 {
-  CustGroup2({
+class ModelWay {
+  ModelWay({
     required this.code,
     required this.msg,
     required this.error,
@@ -19,13 +19,13 @@ class CustGroup2 {
   int code;
   String msg;
   bool error;
-  List<ReCustGroup_2> res;
+  List<ReWay> res;
 
-  factory CustGroup2.fromJson(Map<String, dynamic> json) => CustGroup2(
+  factory ModelWay.fromJson(Map<String, dynamic> json) => ModelWay(
     code: json["code"],
     msg: json["msg"],
     error: json["error"],
-    res: List<ReCustGroup_2>.from(json["res"].map((x) => ReCustGroup_2.fromJson(x))),
+    res: List<ReWay>.from(json["res"].map((x) => ReWay.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -36,16 +36,16 @@ class CustGroup2 {
   };
 }
 
-class ReCustGroup_2 {
-  ReCustGroup_2({
+class ReWay {
+  ReWay({
     required this.id,
-    required this.name,
+    required  this.name,
   });
 
-  int id;
+  String id;
   String name;
 
-  factory ReCustGroup_2.fromJson(Map<String, dynamic> json) => ReCustGroup_2(
+  factory ReWay.fromJson(Map<String, dynamic> json) => ReWay(
     id: json["id"],
     name: json["name"],
   );

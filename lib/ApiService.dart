@@ -20,6 +20,8 @@ import 'Models/ModelDetailFactor.dart';
 import 'Models/ModelFactorsAll.dart';
 import 'Models/ModelPIshfactorsNotAccept.dart';
 import 'Models/ModelProvice.dart';
+import 'Models/ModelRegion.dart';
+import 'Models/ModelWay.dart';
 import 'Models/OfflineModel.dart';
 import 'Models/OnlineModel.dart';
 
@@ -229,7 +231,7 @@ class ApiService{
 
 
 
-  static Future<OfflineModel> OfflinePeson(ProgressDialog pr,String Baseurl,String User,String Pass,String  VisRdf) async{
+  static Future<OfflineModel> OfflinePeson(ProgressDialog pr,String Baseurl,String User,String Pass,String  VisRdf,String  Start, String End,String  Start_En, String End_En) async{
     var login;
 
 
@@ -261,10 +263,10 @@ class ApiService{
           "password":Pass}) ;
     map['date'] = jsonEncode(
         {
-          "fromDate":'2021/01/03',
-          "toDate":'2021/10/03',
-          "fromDateFarsi":'1400/10/10',
-          "toDateFarsi":'1400/10/10'}) ;
+          "fromDate":Start_En,
+          "toDate":End_En,
+          "fromDateFarsi":Start,
+          "toDateFarsi":End}) ;
     map['visId'] = VisRdf;
     map['counter'] = "0";
 
@@ -477,7 +479,7 @@ class ApiService{
     // final url = Uri.parse('http://172.10.10.3:9595/king/Sales');
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
-    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/CustGroup/List');
+      final url = Uri.parse(Baseurl+'/'+'Api/Atiran/CustGroup/List');
     print(map.toString());
     try{
       Response response = await http.post(url,  body:map,
@@ -499,7 +501,7 @@ class ApiService{
       {
         print('Its Ok Request Nima');
         String data=response.body;
-        var DATA=loginModelFromJson(data);
+        var DATA=custGroupFromJson(data);
         print(DATA.toString());
         print(response.body.toString());
         if(DATA.res==true)
@@ -628,7 +630,7 @@ class ApiService{
 
 
 
-  static Future<ModelCity> GetCity(ProgressDialog pr,String Baseurl,String User,String Pass,String PageCounterCustomer,String Len,int Counter) async{
+  static Future<ModelCity> GetCity(String Baseurl,String User,String Pass,String proviceId,String name) async{
     var login;
     // String Base= await  Getbaseurl();
 
@@ -637,18 +639,18 @@ class ApiService{
 
 
 
-    if(!pr.isShowing())
-    {
-      pr.style(
-        textAlign: TextAlign.center,
-        message: 'درحال دریافت شهر ها..',
-        messageTextStyle: TextStyle(
-            fontFamily:  'iransans',
-            fontSize: 14,
-            color: Colors.black87),
-      );
-      await  pr.show();
-    }
+    // if(!pr.isShowing())
+    // {
+    //   pr.style(
+    //     textAlign: TextAlign.center,
+    //     message: 'درحال دریافت شهر ها..',
+    //     messageTextStyle: TextStyle(
+    //         fontFamily:  'iransans',
+    //         fontSize: 14,
+    //         color: Colors.black87),
+    //   );
+    //   await  pr.show();
+    // }
 
     var map = new Map<String, dynamic>();
     map['login'] = jsonEncode({ "username":User,
@@ -656,7 +658,9 @@ class ApiService{
 
 
 
-    map['counter']=jsonEncode(PageCounterCustomer);
+    map['proviceId']=jsonEncode(proviceId);
+    map['name']=jsonEncode(name);
+
 
 
 
@@ -671,11 +675,11 @@ class ApiService{
       ).timeout(
         Duration(seconds: 30),
         onTimeout: () {
-          pr.hide();
+
           return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
         },
       ).catchError((error) {
-        pr.hide();
+
         print('eRROR IS'+error.toString());
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
@@ -685,10 +689,11 @@ class ApiService{
       if(response.statusCode==200)
       {
         print('Its Ok Request Nima');
-        // String data=response.body;
-        // var DATA=modelCityFromJson(map);
-        var map2 = json.decode(response.body);
-        var DATA=ModelCity.fromJson(map2);
+        String data=response.body;
+        var DATA=modelCityFromJson(data);
+        // var DATA=modelCityFromJson(data);
+        // var DATA = json.decode(response.body);
+        // var DATA=ModelCity.fromJson();
         print(DATA.toString());
         print(response.body.toString());
         if(DATA.res==true)
@@ -698,14 +703,14 @@ class ApiService{
           login= DATA;
         }
       }else{
-        pr.hide();
+
         print(response.statusCode.toString());
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       }
     } on SocketException catch (e)
     {
       print('I am Here'+e.toString());
-      pr.hide();
+
       login= null;
     }
     on TimeoutException catch (e) {
@@ -715,7 +720,199 @@ class ApiService{
       print('Error isssssssss: $e');
     }
 
-    pr.hide();
+
+    return login;
+  }
+
+
+
+  static Future<ModelWay> GetWay(String Baseurl,String User,String Pass,String proviceId,String name) async{
+    var login;
+    // String Base= await  Getbaseurl();
+
+    // final url = Uri.parse(Base+'/Sales');
+
+
+
+
+    // if(!pr.isShowing())
+    // {
+    //   pr.style(
+    //     textAlign: TextAlign.center,
+    //     message: 'درحال دریافت شهر ها..',
+    //     messageTextStyle: TextStyle(
+    //         fontFamily:  'iransans',
+    //         fontSize: 14,
+    //         color: Colors.black87),
+    //   );
+    //   await  pr.show();
+    // }
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "username":User,
+      "password":Pass}) ;
+
+
+
+    map['idRegion']=jsonEncode(proviceId);
+    map['name']=jsonEncode(name);
+
+
+
+
+
+    // final url = Uri.parse('http://172.10.10.3:9595/king/Sales');
+    // print(url.toString());
+    // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Masir/List');
+    print(map.toString());
+    try{
+      Response response = await http.post(url,  body:map,
+      ).timeout(
+        Duration(seconds: 30),
+        onTimeout: () {
+
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+
+        print('eRROR IS'+error.toString());
+        // return   ShowSnackbar(error.toString());
+        // throw("some arbitrary error");
+      }) ;
+
+      print('Resi'+response.body.toString());
+      if(response.statusCode==200)
+      {
+        print('Its Ok Request Nima');
+        String data=response.body;
+        var DATA=modelWayFromJson(data);
+        // var DATA=modelCityFromJson(data);
+        // var DATA = json.decode(response.body);
+        // var DATA=ModelCity.fromJson();
+        print(DATA.toString());
+        print(response.body.toString());
+        if(DATA.res==true)
+        {
+          login= DATA;
+        }else{
+          login= DATA;
+        }
+      }else{
+
+        print(response.statusCode.toString());
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    } on SocketException catch (e)
+    {
+      print('I am Here'+e.toString());
+
+      login= null;
+    }
+    on TimeoutException catch (e) {
+      print('Error issssssssswwwwww: $e');
+
+    } on Error catch (e) {
+      print('Error isssssssss: $e');
+    }
+
+
+    return login;
+  }
+
+
+
+  static Future<ModelRegion> GetRegion(String Baseurl,String User,String Pass,String idCity,String name) async{
+    var login;
+    // String Base= await  Getbaseurl();
+
+    // final url = Uri.parse(Base+'/Sales');
+
+
+
+
+    // if(!pr.isShowing())
+    // {
+    //   pr.style(
+    //     textAlign: TextAlign.center,
+    //     message: 'درحال دریافت شهر ها..',
+    //     messageTextStyle: TextStyle(
+    //         fontFamily:  'iransans',
+    //         fontSize: 14,
+    //         color: Colors.black87),
+    //   );
+    //   await  pr.show();
+    // }
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "username":User,
+      "password":Pass}) ;
+
+
+
+    map['idCity']=jsonEncode(idCity);
+    map['name']=jsonEncode(name);
+
+
+
+
+
+    // final url = Uri.parse('http://172.10.10.3:9595/king/Sales');
+    // print(url.toString());
+    // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Region/List');
+    print(map.toString());
+    try{
+      Response response = await http.post(url,  body:map,
+      ).timeout(
+        Duration(seconds: 30),
+        onTimeout: () {
+
+          return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+        },
+      ).catchError((error) {
+
+        print('eRROR IS'+error.toString());
+        // return   ShowSnackbar(error.toString());
+        // throw("some arbitrary error");
+      }) ;
+
+      print('Resi'+response.body.toString());
+      if(response.statusCode==200)
+      {
+        print('Its Ok Request Nima');
+        String data=response.body;
+        var DATA=modelRegionFromJson(data);
+        // var DATA=modelCityFromJson(data);
+        // var DATA = json.decode(response.body);
+        // var DATA=ModelCity.fromJson();
+        print(DATA.toString());
+        print(response.body.toString());
+        if(DATA.res==true)
+        {
+          login= DATA;
+        }else{
+          login= DATA;
+        }
+      }else{
+
+        print(response.statusCode.toString());
+        return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
+      }
+    } on SocketException catch (e)
+    {
+      print('I am Here'+e.toString());
+
+      login= null;
+    }
+    on TimeoutException catch (e) {
+      print('Error issssssssswwwwww: $e');
+
+    } on Error catch (e) {
+      print('Error isssssssss: $e');
+    }
+
+
     return login;
   }
 

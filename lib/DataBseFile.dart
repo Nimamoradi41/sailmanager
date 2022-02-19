@@ -52,6 +52,7 @@ class DataBseFile {
       s.name,
       s.tell1,
       s.tell2,
+      // s.phone,
       s.groupId,
       s.address,
       s.provinceId,
@@ -62,6 +63,7 @@ class DataBseFile {
     print(res.toString());
     return res;
   }
+
 
   Init({String dbname: 'managerdatabase.db'}) async {
     return await openDatabase(join(await getDatabasesPath(), dbname),
@@ -99,7 +101,7 @@ class DataBseFile {
 
           await db.execute('''
               CREATE TABLE Customer (
-              id text,
+              id text not null,
               name text not null,
               tell1 text not null,
               tell2 text not null,
@@ -145,8 +147,139 @@ class DataBseFile {
 
   }
 
+
+  Future<List<Customer_Db>> GetCustomer() async
+  {
+    List<Customer_Db> Customers = <Customer_Db>[];
+    final db = await database;
+    var res = await db!.query("Customer");
+    print(res.length.toString());
+    res.forEach((result) {
+      var dd = result;
+      var visRdf = 0;
+      var name = dd['name'].toString();
+      int id = int.parse(dd['id'].toString());
+      String tell1 = dd['tell1'].toString();
+      String tell2 = dd['tell2'].toString();
+      // String phone = dd['phone'].toString();
+      int groupId = int.parse(dd['groupId'].toString());
+      String address = dd['address'].toString();
+      int provinceId = int.parse(dd['provinceId'].toString());
+      int cityId = int.parse(dd['cityId'].toString());
+      int masirId = int.parse(dd['masirId'].toString());
+      int reginId = int.parse(dd['reginId'].toString());
+
+
+
+      var s = Customer_Db(
+          tell2: tell2,
+          tell1: tell1,
+          // phone: phone,
+          groupId: groupId,
+          address: address,
+          provinceId: provinceId,
+          cityId: cityId,
+          masirId: masirId,
+          reginId: reginId,
+          name: name,
+          id: id);
+      Customers.add(s);
+    });
+    return Customers;
+    // close();
+
+  }
+
+
+  Future<List<ReCustGroup_2>> GetCusgroups() async
+  {
+    List<ReCustGroup_2> Customers = <ReCustGroup_2>[];
+    final db = await database;
+    var res = await db!.query("CustProup");
+    print(res.length.toString());
+    res.forEach((result) {
+      var dd = result;
+      var visRdf = 0;
+      var name = dd['name'].toString();
+      int id = int.parse(dd['id'].toString());
+
+
+
+
+      var s = ReCustGroup_2(
+          id: id,
+          name: name,
+         );
+      Customers.add(s);
+    });
+    return Customers;
+    // close();
+
+  }
+
+
+  Future<List<Re_Provice>> GetPrivice() async
+  {
+    List<Re_Provice> Customers = <Re_Provice>[];
+    final db = await database;
+    var res = await db!.query("Province");
+    print(res.length.toString());
+    res.forEach((result) {
+      var dd = result;
+      var visRdf = 0;
+      var name = dd['name'].toString();
+      int id = int.parse(dd['id'].toString());
+
+
+
+
+      var s = Re_Provice(
+        id: id.toString(),
+        name: name,
+      );
+      Customers.add(s);
+    });
+    return Customers;
+    // close();
+
+  }
+
+
+
+  Future<List<ReC_City>> GetCity() async
+  {
+    List<ReC_City> Customers = <ReC_City>[];
+    final db = await database;
+    var res = await db!.query("City");
+    print(res.length.toString());
+    res.forEach((result) {
+      var dd = result;
+      var visRdf = 0;
+      var name = dd['name'].toString();
+      var cityId = dd['cityId'].toString();
+      int id = int.parse(dd['id'].toString());
+
+
+
+      var s = ReC_City(
+        id:"-7",
+        name: '',
+        provinceId: "-7",
+      );
+
+
+
+      Customers.add(s);
+    });
+    return Customers;
+    // close();
+  }
+
+
+
   Future Insert_Allof_Customer(List<Customer_Db> model, bool Flag) async
   {
+    print('model '+model.length.toString());
     final db = await database;
     if (Flag) {
       print('is Trureeeee');
@@ -154,9 +287,18 @@ class DataBseFile {
     }
 
 
+    // var dd = await Future.wait(model.map((e) async {
+    //   var ress = await db!.insert(Customer_tbl, e.toJson(),
+    //       conflictAlgorithm: ConflictAlgorithm.ignore);
+    //   print('Id is ' + ress.toString());
+    //   return ress.toString();
+    // }));
+
+
+
+
     var dd = await Future.wait(model.map((e) async {
-      var ress = await db!.insert(Customer_tbl, e.toJson(),
-          conflictAlgorithm: ConflictAlgorithm.ignore);
+      var ress = await newCustomer(e);
       print('Id is ' + ress.toString());
       return ress.toString();
     }));
@@ -192,6 +334,8 @@ class DataBseFile {
 
 
   }
+
+
 
 
   Future Insert_Allof_Personel(List<RePerson> model) async
@@ -241,7 +385,7 @@ class DataBseFile {
   }
 
 
-  Future Insert_Allof_CustGrops(List<Re> model) async
+  Future Insert_Allof_CustGrops(List<ReCustGroup_2> model) async
   {
     final db = await database;
 
@@ -335,7 +479,7 @@ class DataBseFile {
   }
 
 
-  Future Insert_Allof_City(List<ReC> model, bool Flag) async
+  Future Insert_Allof_City(List<ReC_City> model, bool Flag) async
   {
     final db = await database;
     if (Flag) {
@@ -344,14 +488,13 @@ class DataBseFile {
     }
 
 
-    var dd = await Future.wait(model.map((e) async {
+    var dd =
+        await Future.wait(model.map((e) async {
       var ress = await db!.insert(
           City_tbl, e.toJson(), conflictAlgorithm: ConflictAlgorithm.ignore);
       print('Id is ' + ress.toString());
       return ress.toString();
     }));
-
-
   }
 
 
@@ -395,11 +538,11 @@ class DataBseFile {
     }
 
 
-    // if(PageCounterCustomer<Data.res.page)
-    // {
-    //   Counter=Counter+Data.res.list.length;
-    //   SendRequestCustomer(pro, Data.res.count.toString(),Counter);
-    // }else{
+    if(PageCounterCustomer<Data.res.page)
+    {
+      Counter=Counter+Data.res.list.length;
+      SendRequestCustomer(pro, Data.res.count.toString(),Counter);
+    }else{
     PageCounterCustomer = 0;
     Jalali j = Jalali.now();
 
@@ -420,7 +563,7 @@ class DataBseFile {
     }
 
 
-    // }
+    }
 
 
     return StrTime;
@@ -551,14 +694,14 @@ class DataBseFile {
     var UserName = prefs.getString('UserName');
     var Password = prefs.getString('Password');
     print('PageCounterCustomer' + PageCounterCity.toString());
-    var Data = await ApiService.GetCity(
-        pro,
-        base!,
-        UserName!,
-        Password!,
-        PageCounterCity.toString(),
-        Len,
-        Counter);
+    // var Data = await ApiService.GetCity(
+    //     pro,
+    //     base!,
+    //     UserName!,
+    //     Password!,
+    //     PageCounterCity.toString(),
+    //     Len,
+    //     Counter);
     if (PageCounterCity == 0) {
       Flag2 = true;
     }
@@ -580,15 +723,15 @@ class DataBseFile {
       StrTime = StrTime + " " + d.hour.toString() + ":" + d.minute.toString();
 
       pro.hide();
-      if (Data != null) {
-        if (Data.code == 200) {
-          ApiService.ShowSnackbar('همگام سازی شهر ها  با موفقیت انجام شد');
-        } else {
-          ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
-        }
-      } else {
-        ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
-      }
+      // if (Data != null) {
+      //   if (Data.code == 200) {
+      //     ApiService.ShowSnackbar('همگام سازی شهر ها  با موفقیت انجام شد');
+      //   } else {
+      //     ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+      //   }
+      // } else {
+      //   ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+      // }
 
 
     // }

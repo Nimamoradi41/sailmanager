@@ -21,7 +21,7 @@ class ModelCity {
   int code;
   String msg;
   bool error;
-  List<ReC> res;
+  List<ReC_City> res;
   int count;
   int page;
 
@@ -29,7 +29,7 @@ class ModelCity {
     code: json["code"],
     msg: json["msg"],
     error: json["error"],
-    res: List<ReC>.from(json["res"].map((x) => ReC.fromJson(x))),
+    res: List<ReC_City>.from(json["res"].map((x) => ReC_City.fromJson(x))),
     count: json["count"],
     page: json["page"],
   );
@@ -44,26 +44,26 @@ class ModelCity {
   };
 }
 
-class ReC {
-  ReC({
-    required this.id,
-    required this.cityId,
-    required this.name,
-  });
+  class ReC_City {
+    ReC_City({
+      required this.id,
+      required  this.provinceId,
+      required this.name,
+    });
 
-  String id;
-  String cityId;
-  String name;
+    String id;
+    String provinceId;
+    String name;
 
-  factory ReC.fromJson(Map<String, dynamic> json) => ReC(
-    id: json["id"],
-    cityId: json["cityId"],
-    name: json["name"],
-  );
+    factory ReC_City.fromJson(Map<dynamic, dynamic> json) => ReC_City(
+      id: json["id"],
+      provinceId: json["provinceId"],
+      name: json["name"]as String,
+    );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "cityId": cityId,
-    "name": name,
-  };
+    Map<String, dynamic> toJson() => {
+      "id": id,
+      "provinceId": provinceId,
+      "name": name,
+    };
 }

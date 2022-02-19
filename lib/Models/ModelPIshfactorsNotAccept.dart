@@ -53,7 +53,7 @@ class Re_NotAccept {
   String tedKol;
   String payment;
   String date;
-  String flag;
+  int flag;
   String customerName;
   int id;
 

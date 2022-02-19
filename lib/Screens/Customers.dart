@@ -1,40 +1,831 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:sailmanager/ApiService.dart';
+import 'package:sailmanager/DataBseFile.dart';
+import 'package:sailmanager/Models/CustGroup.dart';
+import 'package:sailmanager/Models/CustGroup.dart';
+import 'package:sailmanager/Models/CustGroup.dart';
+import 'package:sailmanager/Models/ListCustomer.dart';
+import 'package:sailmanager/Models/ModelCity.dart';
+import 'package:sailmanager/Models/ModelProvice.dart';
+import 'package:sailmanager/Models/ModelRegion.dart';
+import 'package:sailmanager/Models/ModelWay.dart';
+import 'package:sailmanager/Screens/ScreenState.dart';
+import 'package:sailmanager/Screens/ScreenWay.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Constants.dart';
+import 'ScreenCity.dart';
 
-class Customers extends StatelessWidget {
+class Customers extends StatefulWidget {
   const Customers({Key? key}) : super(key: key);
+
+  @override
+  State<Customers> createState() => _CustomersState();
+}
+
+class _CustomersState extends State<Customers> {
+
+
+
+ Future GetGroups(double s)async {
+
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+   var base =prefs.getString('Baseurl');
+   var UserName =prefs.getString('UserName');
+   var Password =prefs.getString('Password');
+   var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+   var Data=await ApiService.CustGroup(pr, base!, UserName!, Password!);
+
+   pr.hide();
+   if(Data!=null)
+   {
+     if(Data.code==200)
+     {
+       ReCustGroup.addAll(Data.res);
+       ReCustGroup.forEach((element) {
+         spinnerItems.add(element.name);
+       });
+       setState(() {
+
+       });
+
+       if(ReRe_Provice.length>2)
+         {
+           ShowModall_CusGroups(ReCustGroup,s);
+         }else{
+         GetProvi(s);
+       }
+
+     }
+   }
+ }
+
+
+
+ Future GetProvi(double s)async {
+
+
+
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+   var base =prefs.getString('Baseurl');
+   var UserName =prefs.getString('UserName');
+   var Password =prefs.getString('Password');
+   var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+   var Data=await ApiService.GetProvice(pr, base!, UserName!, Password!);
+
+   pr.hide();
+   if(Data!=null)
+   {
+     if(Data.code==200)
+     {
+       ReRe_Provice.addAll(Data.res);
+       ReRe_Provice.forEach((element) {
+         spinnerItems_Provice.add(element.name);
+       });
+
+       if(ReRe_Provice.length>0)
+         {
+           dropdownProvice=ReRe_Provice[0].name;
+           IdProvine=ReRe_Provice[0].id;
+         }
+
+
+       setState(() {
+
+       });
+       ShowModall_CusGroups(ReCustGroup,s);
+     }
+   }
+ }
+
+
+
+
+
+
+  List<Customer_Db> MyData=[];
+  List<Customer_Db> MyDataSourch=[];
+  List<ReCustGroup_2> ReCustGroup=[];
+  List<Re_Provice> ReRe_Provice=[];
+  List<ReC_City> ReRe_ReC=[];
+  List <String> spinnerItems = [
+  ] ;
+
+
+ List <String> spinnerItems_Provice = [
+ ] ;
+
+  List <String> StatusAccont = [
+    'همه',
+    'بدهکار',
+    'بستانکار',
+  ] ;
+  String dropdownValue = 'همه';
+  String dropdownProvice = '';
+  String StatusAccontValue = 'همه';
+
+  String IdProvine="";
+  String IdCity="";
+  String IdState="";
+  String IdWay="";
+  String NameCity="شهر را انتخاب کنید";
+  String NameState="منطقه را انتخاب کنید";
+  String NameWay="مسیر را انتخاب کنید";
+
+
+  ShowModall_CusGroups(List<ReCustGroup_2> data,double Sizewid)
+  {
+    showModalBottomSheet(context: context, builder: (ctx){
+      return  StatefulBuilder(
+          builder: (BuildContext context, setState)=> Container(
+          margin: EdgeInsets.only(top: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text('وضعیت حساب',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color:BaseColor,
+                                decoration: TextDecoration.none),),
+                        ),
+                        DropdownButton<String>(
+                          value: StatusAccontValue,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 2,
+                          alignment: Alignment.center,
+                          style: TextStyle(color: BaseColor,
+                              fontSize: 12,fontFamily: 'iransans'),
+                          onChanged: (s){
+                            setState(() {
+                              StatusAccontValue = s.toString();
+                            });
+                          },
+                          underline:  Container(color: Colors.transparent),
+                          items: StatusAccont.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      color: ColorLine
+                      ,width: 2,
+                      height: Sizewid*1/7),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text('گروه مشتری',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color:BaseColor,
+                                decoration: TextDecoration.none),),
+                        ),
+                        DropdownButton<String>(
+                          value: dropdownValue,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 2,
+                          alignment: Alignment.center,
+                          style: TextStyle(color: BaseColor, fontSize: 12,fontFamily: 'iransans'),
+                          onChanged: (s){
+                            setState(() {
+                              dropdownValue = s.toString();
+                            });
+                          },
+                          underline:  Container(color: Colors.transparent),
+                          items: spinnerItems.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      color: ColorLine
+                      ,width: 2,
+                      height: Sizewid*1/7),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text('استان',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color:BaseColor,
+                                decoration: TextDecoration.none),),
+                        ),
+                        DropdownButton<String>(
+                          value: dropdownProvice,
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 24,
+                          elevation: 2,
+                          alignment: Alignment.center,
+                          style: TextStyle(color: BaseColor, fontSize: 12,fontFamily: 'iransans'),
+                          onChanged: (s){
+                            setState(() {
+                              var ds=ReRe_Provice.where((element) => element.name==s.toString()).toList();
+                              if(ds.length>0)
+                                {
+                                  IdProvine=ds[0].id;
+                                }
+                              dropdownProvice = s.toString();
+                            });
+                          },
+                          underline:  Container(color: Colors.transparent),
+                          items: spinnerItems_Provice.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: GestureDetector(
+                      onTap: () async{
+                        if(IdProvine.isNotEmpty)
+                          {
+                            var resuilt= await    Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => ScreenCity(IdProvine,dropdownProvice) ));
+
+                            if(resuilt!=null)
+                              {
+                                ReC_City model=resuilt;
+                                if(model.id!=null){
+                                  setState(() {
+                                    IdCity=model.id;
+                                    NameCity=model.name;
+                                  });
+
+                                }
+                              }
+                          }else{
+                          ApiService.ShowSnackbar('ابتدا استان را انتخاب کنید');
+                        }
+
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: BaseColor,width: 2),
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(NameCity,
+                                textAlign: TextAlign.center,)),
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Icon(Icons.arrow_circle_down_outlined,color: BaseColor, size: 20,),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('شهر',
+                        textAlign: TextAlign.center,),
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: GestureDetector(
+                      onTap: () async{
+                        if(IdCity.isNotEmpty)
+                        {
+                          var resuilt= await    Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => ScreenState(IdCity,NameCity) ));
+
+                          if(resuilt!=null)
+                          {
+                            ReRegion model=resuilt;
+                            if(model.id!=null){
+                              setState(() {
+                                IdState=model.id;
+                                NameState=model.name;
+                              });
+
+                            }
+                          }
+                        }else{
+                          ApiService.ShowSnackbar('ابتدا شهر را انتخاب کنید');
+                        }
+
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: BaseColor,width: 2),
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(NameState,
+                                textAlign: TextAlign.center,)),
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Icon(Icons.arrow_circle_down_outlined,color: BaseColor, size: 20,),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('منطقه',
+                        textAlign: TextAlign.center,),
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 8,
+                    child: GestureDetector(
+                      onTap: () async{
+                        if(IdState.isNotEmpty)
+                        {
+                          var resuilt= await    Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => ScreenWay(IdState,NameState) ));
+                          if(resuilt!=null)
+                          {
+                            ReWay model=resuilt;
+                            if(model.id!=null){
+                              setState(() {
+                                IdWay=model.id;
+                                NameWay=model.name;
+                              });
+
+                            }
+                          }
+                        }else{
+                          ApiService.ShowSnackbar('ابتدا منطقه را انتخاب کنید');
+                        }
+
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: BaseColor,width: 2),
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Expanded(child: Text(NameWay,
+                                textAlign: TextAlign.center,)),
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Icon(Icons.arrow_circle_down_outlined,color: BaseColor, size: 20,),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('مسیر',
+                        textAlign: TextAlign.center,),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ) ;
+    });
+  }
+
+
+
+
+  ShowModall_GetPrivice(List<Re_Provice> data)
+  {
+
+    showModalBottomSheet(context: context, builder: (ctx){
+      return  Container(
+        margin: EdgeInsets.only(top: 16),
+        child: ListView.builder(
+          // itemCount: Departments.length,
+          itemCount: data.length,
+          itemBuilder: (ctx,item){
+            return Container(
+              child: InkWell(
+                highlightColor: Colors.transparent,
+                onTap: ()
+                {
+                  Provicemain=data[item].id ;
+                  Filter(MyDataSourch,Groupmain,Provicemain,0,0,0,ctx,true);
+                },
+                child: Column(
+                  children: [
+                    Text(data[item].name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color:BaseColor,
+                          decoration: TextDecoration.none),),
+                    Divider(),
+                    SizedBox(height: 16,),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ) ;
+    });
+  }
+
+
+
+  ShowModall_GetCity(List<ReC_City> data)
+  {
+
+    showModalBottomSheet(context: context, builder: (ctx){
+      return  Container(
+        margin: EdgeInsets.only(top: 16),
+        child: ListView.builder(
+          // itemCount: Departments.length,
+          itemCount: data.length,
+          itemBuilder: (ctx,item){
+            return Container(
+              child: InkWell(
+                highlightColor: Colors.transparent,
+                onTap: ()
+                {
+                  Citymain=data[item].id as int ;
+                  Filter(MyDataSourch,Groupmain,Provicemain,Citymain,0,0,ctx,true);
+                },
+                child: Column(
+                  children: [
+                    Text(data[item].name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color:BaseColor,
+                          decoration: TextDecoration.none),),
+                    Divider(),
+                    SizedBox(height: 16,),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ) ;
+    });
+  }
+
+
+
+
+  int Groupmain=-7;
+  String Provicemain='-7';
+  int Citymain=-7;
+  Future GetData()async{
+     var Data=await DataBseFile().GetCustomer();
+     var Data2=await DataBseFile().GetCusgroups();
+     var Data3=await DataBseFile().GetPrivice();
+     var Data4=await DataBseFile().GetCity();
+     ReCustGroup.add(ReCustGroup_2(id: -7, name: 'همه'));
+     // ReRe_Provice.add(Re_Provice(id:'-7', name: 'همه'));
+     // ReRe_ReC.add(ReC_City(id: -7,name:'' ,provinceId: -7));
+     // ReCustGroup.addAll(Data2);
+     // ReRe_Provice.addAll(Data3);
+     // ReRe_ReC.addAll(Data4);
+     // if(Data!=null)
+     //   {
+     //     print(Data.length.toString());
+     //     if(Data.length>0)
+     //       {
+     //         MyData=Data;
+     //         MyDataSourch=Data;
+     //         setState(() {
+     //         });
+     //       }
+     //   }
+  }
+
+
+
+  Future Filter(List<Customer_Db> DSource,int Group,String Privince,int City ,int state,int way,BuildContext buildContext,bool flag) async{
+
+    if(Group!=-7)
+      {
+        MyData=  await  DSource.where((element) => element.groupId==Group).toList();
+      }else{
+      MyData=  await  DSource;
+    }
+
+
+    if(Privince!='-7')
+    {
+      MyData=  await  MyData.where((element) => element.provinceId.toString()==Privince).toList();
+    }
+
+
+
+    if(City!='-7')
+    {
+      MyData=  await  MyData.where((element) => element.cityId.toString()==City).toList();
+    }
+
+
+
+    if(flag)
+      {
+        Navigator.pop(buildContext);
+      }
+
+    setState(() {
+
+    });
+
+    print(MyData.length.toString());
+  }
+
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    GetData();
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('لیست مشتری ها',style: TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.bold
-          ),),
-        ),
-        backgroundColor: BaseColor,
-        leading: GestureDetector(
-            onTap: (){
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back,color: Colors.white,)),
-      ),
-      backgroundColor: ColorBack,
-      body: SingleChildScrollView(
-        child: Column(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: ColorBack,
+        body: Stack(
           children: [
-            BoxInfo78(Sizewid,'بناری','099909439787','06134440238','06134587455',
-                'زیتون کارمندی خیابان فیلسوف',(){},(){})
+            Container(
+                height: double.infinity,
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_back,color: BaseColor,),
+                        ),
+                        Expanded(
+                          child: Card(
+                           margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                            child: Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: TextField(
+                                onChanged: (val){
+                                  if(val.isNotEmpty)
+                                  {
+                                    // val=val.replaceAll('ی','ي');
+                                    // val=val.replaceAll('ک','ك');
+                                    MyData =MyDataSourch.where((i) =>
+                                          i.name.contains(val)
+                                        ||i.address.contains(val.toString())
+                                        ||i.tell2.contains(val.toString())
+                                        ||i.tell1.contains(val)).toList();
+                                    if(MyData.length==0)
+                                    {
+                                      MyData.clear();
+                                    }else{
+                                      Filter(MyData, Groupmain,Provicemain, 0, 0, 0, context,false);
+                                    }
+
+
+                                    setState(() {
+
+                                    });
+
+                                  }else{
+                                    // print(Customer.length.toString());
+                                    setState(() {
+                                      MyData=MyDataSourch;
+                                    });
+
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(8),
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                        color: Color(0xff1F3C84).withOpacity(0.80)
+                                    ),
+                                    hintText: 'مشتری خود را جستجو کنید...'
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child:   MyData.length>0? ListView.builder(
+                        itemCount: MyData.length>30?MyData.take(30).length:
+                                   MyData.length,
+                        itemBuilder: (Ctx,Item){
+                          return  BoxInfo78(Sizewid,MyData[Item].name,'',MyData[Item].tell1,MyData[Item].tell2,
+                              MyData[Item].address.trim(),(){},(){});
+                        },
+                      ):Center(
+                        child:  Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                                child: Text('محتوایی برای نمایش وجود ندارد',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: SizeFirst,
+                                      fontWeight: FontWeight.bold,
+                                      color: BaseColor
+                                  ),),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ) ,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8,left: 8,top: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 8),
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: BaseColor.withOpacity(0.25),
+                                            spreadRadius: 2,
+                                            blurRadius: 8
+                                        )
+                                      ],
+                                      color: BaseColor,
+                                      borderRadius: BorderRadius.circular(8)
+                                  ),
+                                  child: Icon(Icons.refresh,color: Colors.white,size: 25,),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Text('دریافت مجدد',
+                                    textAlign: TextAlign.center,
+                                    style:
+                                  TextStyle(
+                                      color: ColorFirst,
+                                      fontSize: 12
+                                  ),),
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              if(ReCustGroup.length>2)
+                                {
+                                  ShowModall_CusGroups(ReCustGroup,Sizewid);
+                                }else{
+                                GetGroups(Sizewid);
+                              }
+
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 8),
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: BaseColor.withOpacity(0.25),
+                                            spreadRadius: 2,
+                                            blurRadius: 8
+                                        )
+                                      ],
+                                      color: BaseColor,
+                                      borderRadius: BorderRadius.circular(8)
+                                  ),
+                                  child: Center(
+                                    child: SvgPicture.asset('images/cate23.svg',width: 15,height: 15,color: Colors.white,),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Text('فیلتر',
+                                    textAlign: TextAlign.center,
+                                    style:
+                                    TextStyle(
+                                        color: ColorFirst,
+                                        fontSize: 12
+                                    ),),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+
+            )
           ],
-        ),
+        )
       ),
     );
   }

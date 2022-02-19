@@ -30,37 +30,47 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
     });
   }
 
-  String creationDateStart='';
+
   TypeFactor _site = TypeFactor.All;
   int FlagInt=0;
   String creationDateEnd='';
-  Updata_creationDateStart(String s){
+  String creationDateStart='';
+  Updata_creationDateStart(String s,String s2){
     setState(() {
       creationDateStart=s;
     });
   }
 
-  Updata_creationDateEnd(String s){
+  Updata_creationDateEnd(String s,String s2){
     setState(() {
       creationDateEnd=s;
     });
   }
+
+
+
   void _showDatePicker_Start(BuildContext context) {
     Pickers.showDatePicker_To(context,Updata_creationDateStart);
   }
+
+
   void _showDatePicker_End(BuildContext context) {
     Pickers.showDatePicker_To(context,Updata_creationDateEnd);
   }
+
+
+
+
+
   ShowModall_Type()
   {
     showModalBottomSheet(context: context, builder: (ctx){
-      return  Container(
+      return   Container(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -82,7 +92,9 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                 children: [
                   Row(
                     children: [
-                      Expanded(child:  Text('همه',
+                      Expanded(
+                        child:
+                      Text('همه',
                         textAlign: TextAlign.end,
                         style: TextStyle(color:
                         BaseColor,
@@ -92,7 +104,8 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                         value: TypeFactor.All,
                         groupValue: _site,
                         activeColor: BaseColor,
-                        onChanged: (dynamic value) {
+                        onChanged: (dynamic value)async {
+                          MyDate= await MyDate_Temp;
                           setState(() {
                             _site = value;
                             FlagInt=0;
@@ -114,7 +127,8 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                         value: TypeFactor.Accept,
                         groupValue: _site,
                         activeColor: BaseColor,
-                        onChanged: (dynamic value) {
+                        onChanged: (dynamic value)async {
+                          MyDate= await MyDate_Temp.where((element) => element.flag==1).toList();
                           setState(() {
                             _site = value;
                             FlagInt=1;
@@ -126,7 +140,7 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                   ),
                   Row(
                     children: [
-                      Expanded(child:  Text('تایید نشده',
+                      Expanded(child:  Text('عدم تایید',
                         textAlign: TextAlign.end,
                         style: TextStyle(color:
                         BaseColor,
@@ -136,7 +150,8 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                         value: TypeFactor.Cancel,
                         groupValue: _site,
                         activeColor: BaseColor,
-                        onChanged: (dynamic value) {
+                        onChanged: (dynamic value) async{
+                          MyDate= await MyDate_Temp.where((element) => element.flag==3).toList();
                           setState(() {
                             _site = value;
                             FlagInt=3;
@@ -158,7 +173,8 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                         value: TypeFactor.NotAccept,
                         groupValue: _site,
                         activeColor: BaseColor,
-                        onChanged: (dynamic value) {
+                        onChanged: (dynamic value) async{
+                          MyDate= await MyDate_Temp.where((element) => element.flag==2).toList();
                           setState(() {
                             FlagInt=2;
                             _site = value;
@@ -173,12 +189,20 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
             ],
           ),
         ),
-      ) ;
+      );
     });
   }
 
 
+
+
+
+
+
   List<Re_FactorsAlls> MyDate=[];
+  List<Re_FactorsAlls> MyDate_Temp=[];
+
+
 
   Future GetDataRef()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -194,6 +218,7 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
       {
         MyDate.clear();
         MyDate=Data.res;
+        MyDate_Temp=Data.res;
         setState(() {
         });
       }else{
@@ -211,6 +236,9 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
     GetDataNow();
     GetDataRef();
   }
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
@@ -285,43 +313,62 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                 ),
               ),
               Expanded(
-                child: Container(
-                  child:
-                  MyDate.length>0?
-                  ListView.builder(
-                    itemCount: MyDate.length,
-                    itemBuilder: (ctx,item){
-                      return  BoxInfo_77(
-                          Sizewid,MyDate[item].customerName,MyDate[item].date,MyDate[item].tedVah,MyDate[item].tedJoz,MyDate[item].tedKol,
-                          MyDate[item].payment,
-                          MyDate[item].flag==1?'تایید شده':
-                          MyDate[item].flag==2?'در انتظار تایید':
-                          'عدم تایید'
-                          ,Colors.white,
-                          MyDate[item].flag==1?Color(0xff4E9F3D):
-                          MyDate[item].flag==2?BaseColor:
-                          Color(0xffE02401)
-                      );
-                    },
-                  ):  Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 24.0),
-                          child: Text('محتوایی برای نمایش وجود ندارد',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: SizeFirst,
-                                fontWeight: FontWeight.bold,
-                                color: BaseColor
-                            ),),
-                        ),
-                      ],
+                child: Stack(
+                  children: [
+                    RefreshIndicator(
+                      key: _refreshIndicatorKey,
+                      onRefresh: GetDataRef,
+                      child: Container(
+                        child:
+                        ListView.builder(
+                          itemCount: MyDate.length,
+                          itemBuilder: (ctx,item){
+                            return
+                              BoxInfo_77(
+                                  Sizewid,MyDate[item].customerName,MyDate[item].date,MyDate[item].tedVah,MyDate[item].tedJoz,MyDate[item].tedKol,
+                                  MyDate[item].payment,
+                                  MyDate[item].flag==1?'تایید شده':
+                                  MyDate[item].flag==2?'در انتظار تایید':
+                                  'عدم تایید'
+                                  ,Colors.white,
+                                  MyDate[item].flag==1?Color(0xff4E9F3D):
+                                  MyDate[item].flag==2?BaseColor:
+                                  Color(0xffE02401)
+                              );
+
+
+
+
+
+
+
+
+                          },
+                        )
+                      ),
                     ),
-                  ),
+                    MyDate.length==0?
+                    Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset('images/noting.svg',width: 150,height: 150,),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 24.0),
+                            child: Text('محتوایی برای نمایش وجود ندارد',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: SizeFirst,
+                                  fontWeight: FontWeight.bold,
+                                  color: BaseColor
+                              ),),
+                          ),
+                        ],
+                      ),
+                    ):Container(),
+                  ],
+
                 ),
               ),
               Padding(

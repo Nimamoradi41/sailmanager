@@ -66,6 +66,7 @@ class Customer_Db {
     required  this.name,
     required this.tell1,
     required this.tell2,
+    // required this.phone,
     required this.groupId,
     required this.address,
     required this.provinceId,
@@ -78,6 +79,7 @@ class Customer_Db {
   String name;
   String tell1;
   String tell2;
+  // String phone='';
   int groupId;
   String address;
   int provinceId;
@@ -90,6 +92,7 @@ class Customer_Db {
     name: json["name"],
     tell1: json["tell1"],
     tell2: json["tell2"],
+    // phone: json["phone"],
     groupId: json["groupId"],
     address: json["address"],
     provinceId: json["provinceId"],
@@ -103,6 +106,7 @@ class Customer_Db {
     "name": name,
     "tell1": tell1,
     "tell2": tell2,
+    // "phone": phone,
     "groupId": groupId.toString(),
     "address": address,
     "provinceId": provinceId.toString(),

@@ -73,8 +73,6 @@ class _ScreenSettingState extends State<ScreenSetting> {
   }
 
 
-
-
   Future RunCustGroup()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? Baseurl=  prefs.getString("Baseurl");

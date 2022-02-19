@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -36,13 +38,19 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
 
 
 
-  Future RunAcceptOrNotAccept(bool Flag,String Com) async{
+  Future RunAcceptOrNotAccept(bool Flag,String Com,bool Flag_Desc) async{
 
-    if(Com==null||Com.isEmpty)
+
+     if(Flag_Desc==true)
       {
-        ApiService.ShowSnackbar('توضیحات خود را وارد کنید');
-        return;
+        if(Com==null||Com.isEmpty)
+        {
+          ApiService.ShowSnackbar('توضیحات خود را وارد کنید');
+          return;
+        }
       }
+
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var base =prefs.getString('Baseurl');
     var UserName =prefs.getString('UserName');
@@ -93,6 +101,9 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
     }
   }
 
+
+
+  var Flag_Desc=false;
 
   TextEditingController txt_1 =TextEditingController();
   @override
@@ -238,13 +249,18 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                             height: Sizewid*1/7,
                             color: ColorLine,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text('چک در راه',style: TextStyle(
-                                color: ColorFirst,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold
-                            ),),
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text('چک \n در راه',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: ColorFirst,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            ),
                           ),
                         ],
                       ),
@@ -257,6 +273,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                       Row(
                         children: [
                           Expanded(
+                            flex: 3,
                               child: BoxInfo_3('مبلغ',priceChkReturn)),
                           Container(
                             width: 2,
@@ -264,6 +281,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                             color: ColorLine,
                           ),
                           Expanded(
+                              flex: 2,
                               child: BoxInfo_3('تعداد',countChkReturn)),
                           Container(
                             width: 2,
@@ -271,6 +289,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                             color: ColorLine,
                           ),
                           Expanded(
+                            flex: 1,
                               child: BoxInfo_3(
                                   'چک برگشتی',
                                   countChkReturn.isEmpty||countChkReturn=='0'?
@@ -281,28 +300,109 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                   ),
                 ),
               ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
+                width: double.infinity,
+                height: 2,
+                color: ColorLine,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric( vertical: 16),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Expanded(
-                      child: Text(Etebar.isEmpty?'نامشخص':Etebar,
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          color: ColorSecond,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold
-                      ),),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(' : مانده اعتبار ',style: TextStyle(
-                        color: ColorSecond,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      child:  Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            Text('مانده اعتبار',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              color: ColorSecond,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
 
-                      ),),
+                            ),),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
+                              child: Text(Etebar,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: ColorSecond,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+
+                                ),),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 2,
+                      height: Sizewid*1/7,
+                      color: ColorLine,
+                    ),
+                    Expanded(
+                      child:  Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            Text('مانده مشتری',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: ColorSecond,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+
+                              ),),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
+                              child: Text(Etebar,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: ColorSecond,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+
+                                ),),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 2,
+                      height: Sizewid*1/7,
+                      color: ColorLine,
+                    ),
+                    Expanded(
+                      child:  Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            Text('تخفیف',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: ColorSecond,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+
+                              ),),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
+                              child: Text(Etebar,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: ColorSecond,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+
+                                ),),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -388,6 +488,30 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               Expanded(child: BoxInfo_3('واحد',MyData[item].vah)),
 
                             ],
+                          ),
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                            height: 2,
+                            width: double.infinity,
+                            color: ColorLine,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(child: BoxInfo_3('بهای کل',MyData[item].kol)),
+                              Container(
+                                width: 2,
+                                height: Sizewid*1/7,
+                                color: ColorLine,
+                              ),
+                              Expanded(child: BoxInfo_3('بهای جز',MyData[item].joz)),
+                              Container(
+                                width: 2,
+                                height: Sizewid*1/7,
+                                color: ColorLine,
+                              ),
+                              Expanded(child: BoxInfo_3('تخفیف',MyData[item].vah)),
+
+                            ],
                           )
                         ],
                       ),
@@ -395,7 +519,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                   );
                 },
               ),
-              BoxInput_Desc('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1),
+              Flag_Desc?
+              BoxInput_Desc('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1):Container(),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
@@ -404,8 +529,15 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                       child: Container(
                         margin: EdgeInsets.only(right: 8,top: 16),
                         child: ElevatedButton(onPressed: (){
-
-                          RunAcceptOrNotAccept(false,txt_1.text);
+                          if(txt_1.text.isEmpty)
+                            {
+                              ApiService.ShowSnackbar('توضیحات خود را وارد کنید');
+                              setState(() {
+                                Flag_Desc=true;
+                              });
+                              return;
+                            }
+                          RunAcceptOrNotAccept(false,txt_1.text,Flag_Desc);
                         },
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(Color(0xff5E5E5E)),
@@ -426,7 +558,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                       child: Container(
                         margin: EdgeInsets.only(left: 8,top: 16),
                         child: ElevatedButton(onPressed: (){
-                          RunAcceptOrNotAccept(true,txt_1.text);
+                          RunAcceptOrNotAccept(false,txt_1.text,Flag_Desc);
                         },
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(BaseColor),

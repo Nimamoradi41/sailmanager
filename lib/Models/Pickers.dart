@@ -24,10 +24,13 @@ Future  dataaaa(BuildContext context,Function function)async{
     lastDate: Jalali(1450, 9),
   );
 
+
+
   if(picked!=null)
   {
     var Data=Convert_DATE(picked.day.toString(), picked.month.toString(), picked.year.toString());
-    function(Data);
+    var Data_En= Convert_DATE(picked.toGregorian().day.toString(),picked.toGregorian().month.toString(),picked.toGregorian().year.toString());
+    function(Data,Data_En);
   }
 
 
