@@ -24,6 +24,7 @@ import 'Models/ModelRegion.dart';
 import 'Models/ModelWay.dart';
 import 'Models/OfflineModel.dart';
 import 'Models/OnlineModel.dart';
+import 'Models/PishCustomer.dart';
 
 
 class ApiService{
@@ -231,7 +232,7 @@ class ApiService{
 
 
 
-  static Future<OfflineModel> OfflinePeson(ProgressDialog pr,String Baseurl,String User,String Pass,String  VisRdf,String  Start, String End,String  Start_En, String End_En) async{
+  static Future<OfflineModel> OfflinePeson(ProgressDialog pr,String Baseurl,String User,String Pass,String  VisRdf,String  Start, String End,String  Start_En, String End_En,String Page) async{
     var login;
 
 
@@ -268,7 +269,7 @@ class ApiService{
           "fromDateFarsi":Start,
           "toDateFarsi":End}) ;
     map['visId'] = VisRdf;
-    map['counter'] = "0";
+    map['counter'] = Page;
 
 
 
@@ -301,10 +302,17 @@ class ApiService{
         String data=response.body;
         print(data);
         var DATA=offlineModelFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
-        if(DATA.res==true)
+
+
+        if(DATA!=null)
         {
+          // if(DATA.code==300)
+          //   {
+          //     if(DATA.msg.isNotEmpty)
+          //     {
+          //       ShowSnackbar(DATA.msg);
+          //     }
+          //   }
 
           login= DATA;
         }else{
@@ -331,7 +339,7 @@ class ApiService{
       print('Error isssssssss: $e');
     }
 
-    pr.hide();
+
     return login;
   }
 
@@ -920,36 +928,44 @@ class ApiService{
 
 
 
-  static Future<ListCustomer> GetCustomer(ProgressDialog pr,String Baseurl,String User,String Pass,String PageCounterCustomer,String Len,int Counter) async{
+  static Future<ListCustomer> GetCustomer(String Baseurl,String User,String Pass,
+      String groupId,String provinceId,String cityId,
+      String regeinId,String masirId,String name,String flagAccount) async{
     var login;
 
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Customer/List');
 
-    print('PageCounterCustomer is'+PageCounterCustomer.toString());
+    // print('PageCounterCustomer is'+PageCounterCustomer.toString());
     // ignore: unrelated_type_equality_checks
-    if(PageCounterCustomer=="0")
-    {
-      pr.style(
-        textAlign: TextAlign.center,
-        message: ' درحال دریافت لیست مشتری $Counter/$Len ',
-        messageTextStyle: TextStyle(
-            fontFamily:  'iransans',
-            fontSize: 14,
-            color: Colors.black87),
-      );
-      await  pr.show();
-    }else{
-      pr.update(
-        message: ' درحال دریافت لیست مشتری $Counter/$Len ',
-      );
-      print('B');
-    }
+    // if(PageCounterCustomer=="0")
+    // {
+    //   pr.style(
+    //     textAlign: TextAlign.center,
+    //     message: ' درحال دریافت لیست مشتری $Counter/$Len ',
+    //     messageTextStyle: TextStyle(
+    //         fontFamily:  'iransans',
+    //         fontSize: 14,
+    //         color: Colors.black87),
+    //   );
+    //   await  pr.show();
+    // }else{
+    //   pr.update(
+    //     message: ' درحال دریافت لیست مشتری $Counter/$Len ',
+    //   );
+    //   print('B');
+    // }
 
     var map = new Map<String, dynamic>();
     map['login'] = jsonEncode({ "userName":User,
       "password":Pass}) ;
 
-    map['counter']=jsonEncode(PageCounterCustomer);
+    map['groupId']=jsonEncode(groupId);
+    map['flagAccount']=jsonEncode(flagAccount);
+    map['provinceId']=jsonEncode(provinceId);
+    map['cityId']=jsonEncode(cityId);
+    map['regeinId']=jsonEncode(regeinId);
+    map['masirId']=jsonEncode(masirId);
+    map['name']=jsonEncode(name);
     // map['countpage']=PageCounterCustomer;
 
 
@@ -961,11 +977,11 @@ class ApiService{
         ,).timeout(
         Duration(seconds: 50),
         onTimeout: () {
-          pr.hide();
+
           return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
         },
       ).catchError((error) {
-        pr.hide();
+
         print(error.toString());
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
         throw("some arbitrary error");
@@ -989,14 +1005,16 @@ class ApiService{
           login= DATA;
         }
       }else{
-        pr.hide();
+        // pr.hide();
       }
-    }catch (e)
+    }
+
+    catch (e)
     {
       print('Eeror is Herer'+e.toString());
       ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       login= null;
-      pr.hide();
+
 
     }
     return login;
@@ -1006,23 +1024,24 @@ class ApiService{
 
 
 
-  static Future<ListPersonel> GetPerson(ProgressDialog pr,String Baseurl,String User,String Pass) async{
+  static Future<ListPersonel> GetPerson(String Baseurl,String User,String Pass) async{
     var login;
 
-    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Personle/List');
+    // final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Personle/ListOnline');
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Personle/ListOnline');
 
 
     // ignore: unrelated_type_equality_checks
 
-      pr.style(
-        textAlign: TextAlign.center,
-        message: ' درحال دریافت لیست پرسنل',
-        messageTextStyle: TextStyle(
-            fontFamily:  'iransans',
-            fontSize: 14,
-            color: Colors.black87),
-      );
-      await  pr.show();
+      // pr.style(
+      //   textAlign: TextAlign.center,
+      //   message: ' درحال دریافت لیست پرسنل',
+      //   messageTextStyle: TextStyle(
+      //       fontFamily:  'iransans',
+      //       fontSize: 14,
+      //       color: Colors.black87),
+      // );
+      // await  pr.show();
 
 
     var map = new Map<String, dynamic>();
@@ -1031,6 +1050,80 @@ class ApiService{
 
 
 
+
+
+    print('sgfsfgsdfgfdsg'+map.toString());
+
+    try{
+      Response response = await post(url,  body:map
+        ,).timeout(
+        Duration(seconds: 50),
+
+      ).catchError((error) {
+        // pr.hide();
+        print(error.toString());
+
+        throw("some arbitrary error");
+      });;
+      if(response.statusCode==200)
+      {
+        print('Its Ok Request Nima');
+        String data=response.body;
+        print(data);
+        var DATA=listPersonelFromJson(data);
+        print(DATA.toString());
+        print(response.body.toString());
+        // ignore: unnecessary_null_comparison
+
+        if(DATA.res!=null)
+        {
+          // pr.hide();
+          login= DATA;
+        }else{
+          // pr.hide();
+          login= DATA;
+        }
+      }else{
+        // pr.hide();
+      }
+    }catch (e)
+    {
+      print('Eeror is Herer'+e.toString());
+
+      login= null;
+      // pr.hide();
+
+    }
+    return login;
+  }
+
+
+
+  static Future<PishCustomer> GetPishCustomer(ProgressDialog pr,String Baseurl,String User,String Pass,String custId) async{
+    var login;
+
+    final url = Uri.parse(Baseurl+'/'+'Api/Atiran/SalePish/ListCustomer');
+
+
+    // ignore: unrelated_type_equality_checks
+
+    pr.style(
+      textAlign: TextAlign.center,
+      message: ' درحال دریافت لیست پیش دریافت های مشتری',
+      messageTextStyle: TextStyle(
+          fontFamily:  'iransans',
+          fontSize: 14,
+          color: Colors.black87),
+    );
+    await  pr.show();
+
+
+    var map = new Map<String, dynamic>();
+    map['login'] = jsonEncode({ "userName":User,
+      "password":Pass}) ;
+
+
+    map['custId'] =custId ;
 
 
     print('sgfsfgsdfgfdsg'+map.toString());
@@ -1054,7 +1147,7 @@ class ApiService{
         print('Its Ok Request Nima');
         String data=response.body;
         print(data);
-        var DATA=listPersonelFromJson(data);
+        var DATA=pishCustomerFromJson(data);
         print(DATA.toString());
         print(response.body.toString());
         // ignore: unnecessary_null_comparison

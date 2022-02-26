@@ -516,7 +516,7 @@ class BoxInfo_Right extends StatelessWidget {
                 color: ColorFirst
             ),),
           Padding(
-            padding: const EdgeInsets.only(top: 10.0),
+            padding: const EdgeInsets.only(top: 10.0,right: 4,left: 4),
             child: Text(Second==null||Second.isEmpty?'نامشخص':Second,
               style: TextStyle(
                   fontSize: SizeSecond,

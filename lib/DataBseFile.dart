@@ -41,7 +41,7 @@ class DataBseFile {
   String path = '';
 
 
-  newCustomer(Customer_Db s) async {
+  newCustomer(Re_Customer s) async {
     final db = await database;
     var res = await db!.rawInsert('''
         INSERT INTO Customer (
@@ -116,41 +116,41 @@ class DataBseFile {
   }
 
 
-  Future<List<RePerson>> GetPersonel() async
+  Future GetPersonel() async
   {
-    List<RePerson> Personel = <RePerson>[];
-    final db = await database;
-    var res = await db!.query("Personel");
-    res.forEach((result) {
-      var dd = result;
-      var visRdf = 0;
-      var name = dd['name'].toString();
-      String tell1 = dd['tell1'].toString();
-      String tell2 = dd['tell2'].toString();
-      String cell = dd['cell'].toString();
-      if (dd['visRdf']
-          .toString()
-          .isEmpty) {
-        visRdf = 0;
-      } else {
-        visRdf = int.parse(dd['visRdf'].toString());
-      }
-      var s = RePerson(tell2: tell2,
-          tell1: tell1,
-          cell: cell,
-          name: name,
-          visRdf: visRdf);
-      Personel.add(s);
-    });
-    return Personel;
+    // List<RePerson> Personel = <RePerson>[];
+    // final db = await database;
+    // var res = await db!.query("Personel");
+    // res.forEach((result) {
+    //   var dd = result;
+    //   var visRdf = 0;
+    //   var name = dd['name'].toString();
+    //   String tell1 = dd['tell1'].toString();
+    //   String tell2 = dd['tell2'].toString();
+    //   String cell = dd['cell'].toString();
+    //   if (dd['visRdf']
+    //       .toString()
+    //       .isEmpty) {
+    //     visRdf = 0;
+    //   } else {
+    //     visRdf = int.parse(dd['visRdf'].toString());
+    //   }
+    //   var s = RePerson(tell2: tell2,
+    //       tell1: tell1,
+    //       cell: cell,
+    //       name: name,
+    //       visRdf: visRdf);
+    //   Personel.add(s);
+    // });
+    // return Personel;
     // close();
 
   }
 
 
-  Future<List<Customer_Db>> GetCustomer() async
+  Future<List<Re_Customer>> GetCustomer() async
   {
-    List<Customer_Db> Customers = <Customer_Db>[];
+    List<Re_Customer> Customers = <Re_Customer>[];
     final db = await database;
     var res = await db!.query("Customer");
     print(res.length.toString());
@@ -171,19 +171,19 @@ class DataBseFile {
 
 
 
-      var s = Customer_Db(
-          tell2: tell2,
-          tell1: tell1,
-          // phone: phone,
-          groupId: groupId,
-          address: address,
-          provinceId: provinceId,
-          cityId: cityId,
-          masirId: masirId,
-          reginId: reginId,
-          name: name,
-          id: id);
-      Customers.add(s);
+      // var s = Customer_Db(
+      //     tell2: tell2,
+      //     tell1: tell1,
+      //     // phone: phone,
+      //     groupId: groupId,
+      //     address: address,
+      //     provinceId: provinceId,
+      //     cityId: cityId,
+      //     masirId: masirId,
+      //     reginId: reginId,
+      //     name: name,
+      //     id: id);
+      // Customers.add(s);
     });
     return Customers;
     // close();
@@ -277,7 +277,7 @@ class DataBseFile {
 
 
 
-  Future Insert_Allof_Customer(List<Customer_Db> model, bool Flag) async
+  Future Insert_Allof_Customer(List<Re_Customer> model, bool Flag) async
   {
     print('model '+model.length.toString());
     final db = await database;
@@ -521,49 +521,49 @@ class DataBseFile {
     var UserName = prefs.getString('UserName');
     var Password = prefs.getString('Password');
     print('PageCounterCustomer' + PageCounterCustomer.toString());
-    var Data = await ApiService.GetCustomer(
-        pro,
-        base!,
-        UserName!,
-        Password!,
-        PageCounterCustomer.toString(),
-        Len,
-        Counter);
-    if (PageCounterCustomer == 0) {
-      Flag2 = true;
-    }
-    PageCounterCustomer = PageCounterCustomer + 1;
-    if (Data.res.list != null) {
-      var ss = await Insert_Allof_Customer(Data.res.list, Flag2);
-    }
-
-
-    if(PageCounterCustomer<Data.res.page)
-    {
-      Counter=Counter+Data.res.list.length;
-      SendRequestCustomer(pro, Data.res.count.toString(),Counter);
-    }else{
-    PageCounterCustomer = 0;
-    Jalali j = Jalali.now();
-
-    var d = DateTime.now();
-    StrTime =
-        Convert_DATE(j.day.toString(), j.month.toString(), j.year.toString());
-    StrTime = StrTime + " " + d.hour.toString() + ":" + d.minute.toString();
-
-    pro.hide();
-    if (Data != null) {
-      if (Data.code == 200) {
-        ApiService.ShowSnackbar('همگام سازی مشتری ها  با موفقیت انجام شد');
-      } else {
-        ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
-      }
-    } else {
-      ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
-    }
-
-
-    }
+    // var Data = await ApiService.GetCustomer(
+    //     pro,
+    //     base!,
+    //     UserName!,
+    //     Password!,
+    //     PageCounterCustomer.toString(),
+    //     Len,
+    //     Counter);
+    // if (PageCounterCustomer == 0) {
+    //   Flag2 = true;
+    // }
+    // PageCounterCustomer = PageCounterCustomer + 1;
+    // if (Data.res.list != null) {
+    //   var ss = await Insert_Allof_Customer(Data.res.list, Flag2);
+    // }
+    //
+    //
+    // if(PageCounterCustomer<Data.res.page)
+    // {
+    //   Counter=Counter+Data.res.list.length;
+    //   SendRequestCustomer(pro, Data.res.count.toString(),Counter);
+    // }else{
+    // PageCounterCustomer = 0;
+    // Jalali j = Jalali.now();
+    //
+    // var d = DateTime.now();
+    // StrTime =
+    //     Convert_DATE(j.day.toString(), j.month.toString(), j.year.toString());
+    // StrTime = StrTime + " " + d.hour.toString() + ":" + d.minute.toString();
+    //
+    // pro.hide();
+    // if (Data != null) {
+    //   if (Data.code == 200) {
+    //     ApiService.ShowSnackbar('همگام سازی مشتری ها  با موفقیت انجام شد');
+    //   } else {
+    //     ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+    //   }
+    // } else {
+    //   ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+    // }
+    //
+    //
+    // }
 
 
     return StrTime;
@@ -595,93 +595,93 @@ class DataBseFile {
   }
 
 
-  Future<String> SendRequestPersonel(ProgressDialog pro) async
+  Future SendRequestPersonel(ProgressDialog pro) async
   {
-    String StrTime = '';
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var base = prefs.getString('Baseurl');
-    var UserName = prefs.getString('UserName');
-    var Password = prefs.getString('Password');
-    print('PageCounterCustomer' + PageCounterCustomer.toString());
-    var Data = await ApiService.GetPerson(pro, base!, UserName!, Password!);
-    if (Data != null) {
-      await Insert_Allof_Personel(Data.res);
-    }
-
-    Jalali j = Jalali.now();
-
-    var d = DateTime.now();
-    StrTime =
-        Convert_DATE(j.day.toString(), j.month.toString(), j.year.toString());
-    StrTime = StrTime + " " + d.hour.toString() + ":" + d.minute.toString();
-
-    pro.hide();
-    if (Data != null) {
-      if (Data.code == 200) {
-        ApiService.ShowSnackbar('همگام سازی مشتری ها  با موفقیت انجام شد');
-      } else {
-        ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
-      }
-    } else {
-      ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
-    }
-
-    return StrTime;
-  }
-
-
-  Future<String> SendRequestCustGroups(ProgressDialog pro) async
-  {
-    String StrTime = '';
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var base = prefs.getString('Baseurl');
-    var UserName = prefs.getString('UserName');
-    var Password = prefs.getString('Password');
-    print('PageCounterCustomer' + PageCounterCustomer.toString());
-    var Data = await ApiService.CustGroup(pro, base!, UserName!, Password!);
-    if (Data != null) {
-      await Insert_Allof_CustGrops(Data.res);
-    }
-    Jalali j = Jalali.now();
-
-    var d = DateTime.now();
-    StrTime =
-        Convert_DATE(j.day.toString(), j.month.toString(), j.year.toString());
-    StrTime = StrTime + " " + d.hour.toString() + ":" + d.minute.toString();
-
-    pro.hide();
-    ApiService.ShowSnackbar('همگام سازی گروه گالا  با موفقیت انجام شد');
-    return StrTime;
-  }
-
-
-  Future<String> SendRequestProvice(ProgressDialog pro) async
-  {
-    String StrTime = '';
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var base = prefs.getString('Baseurl');
-    var UserName = prefs.getString('UserName');
-    var Password = prefs.getString('Password');
-    print('PageCounterCustomer' + PageCounterCustomer.toString());
-    var Data = await ApiService.GetProvice(pro, base!, UserName!, Password!);
-    if (Data != null) {
-      // if(Data.res.length>0)
-      //   {
-      //     prefs.setString('ProviceId',Data.res[0].id.toString());
-      //   }
-
-      await Insert_Allof_Provice(Data.res);
-    }
-    Jalali j = Jalali.now();
-
-    var d = DateTime.now();
-    StrTime =
-        Convert_DATE(j.day.toString(), j.month.toString(), j.year.toString());
-    StrTime = StrTime + " " + d.hour.toString() + ":" + d.minute.toString();
-
-    pro.hide();
-    ApiService.ShowSnackbar('همگام سازی استان ها با موفقیت انجام شد');
-    return StrTime;
+  //   String StrTime = '';
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var base = prefs.getString('Baseurl');
+  //   var UserName = prefs.getString('UserName');
+  //   var Password = prefs.getString('Password');
+  //   print('PageCounterCustomer' + PageCounterCustomer.toString());
+  //   var Data = await ApiService.GetPerson(pro, base!, UserName!, Password!);
+  //   if (Data != null) {
+  //     await Insert_Allof_Personel(Data.res);
+  //   }
+  //
+  //   Jalali j = Jalali.now();
+  //
+  //   var d = DateTime.now();
+  //   StrTime =
+  //       Convert_DATE(j.day.toString(), j.month.toString(), j.year.toString());
+  //   StrTime = StrTime + " " + d.hour.toString() + ":" + d.minute.toString();
+  //
+  //   pro.hide();
+  //   if (Data != null) {
+  //     if (Data.code == 200) {
+  //       ApiService.ShowSnackbar('همگام سازی مشتری ها  با موفقیت انجام شد');
+  //     } else {
+  //       ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+  //     }
+  //   } else {
+  //     ApiService.ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده');
+  //   }
+  //
+  //   return StrTime;
+  // }
+  //
+  //
+  // Future<String> SendRequestCustGroups(ProgressDialog pro) async
+  // {
+  //   String StrTime = '';
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var base = prefs.getString('Baseurl');
+  //   var UserName = prefs.getString('UserName');
+  //   var Password = prefs.getString('Password');
+  //   print('PageCounterCustomer' + PageCounterCustomer.toString());
+  //   var Data = await ApiService.CustGroup(pro, base!, UserName!, Password!);
+  //   if (Data != null) {
+  //     await Insert_Allof_CustGrops(Data.res);
+  //   }
+  //   Jalali j = Jalali.now();
+  //
+  //   var d = DateTime.now();
+  //   StrTime =
+  //       Convert_DATE(j.day.toString(), j.month.toString(), j.year.toString());
+  //   StrTime = StrTime + " " + d.hour.toString() + ":" + d.minute.toString();
+  //
+  //   pro.hide();
+  //   ApiService.ShowSnackbar('همگام سازی گروه گالا  با موفقیت انجام شد');
+  //   return StrTime;
+  // }
+  //
+  //
+  // Future<String> SendRequestProvice(ProgressDialog pro) async
+  // {
+  //   String StrTime = '';
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var base = prefs.getString('Baseurl');
+  //   var UserName = prefs.getString('UserName');
+  //   var Password = prefs.getString('Password');
+  //   print('PageCounterCustomer' + PageCounterCustomer.toString());
+  //   var Data = await ApiService.GetProvice(pro, base!, UserName!, Password!);
+  //   if (Data != null) {
+  //     // if(Data.res.length>0)
+  //     //   {
+  //     //     prefs.setString('ProviceId',Data.res[0].id.toString());
+  //     //   }
+  //
+  //     await Insert_Allof_Provice(Data.res);
+  //   }
+  //   Jalali j = Jalali.now();
+  //
+  //   var d = DateTime.now();
+  //   StrTime =
+  //       Convert_DATE(j.day.toString(), j.month.toString(), j.year.toString());
+  //   StrTime = StrTime + " " + d.hour.toString() + ":" + d.minute.toString();
+  //
+  //   pro.hide();
+  //   ApiService.ShowSnackbar('همگام سازی استان ها با موفقیت انجام شد');
+  //   return StrTime;
   }
 
 

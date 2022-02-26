@@ -33,22 +33,52 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
   String countChkReturn='';
   String priceChkReturn='';
   String Etebar='';
+  String Man='';
+  String Takhfif='';
 
   List<ListKala> MyData=[];
 
 
-
+  Future<bool> _onWillPop(bool Flag) async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: Align(
+            alignment: Alignment.topRight,
+            child: Text('مجوز',textAlign: TextAlign.right,)),
+        content:
+        SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const <Widget>[
+                Text('آیا مطمعن هستید؟ ',textAlign: TextAlign.end,),
+              ],
+            ),
+          ),
+        )
+        ,
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child:  Text('نه',style: TextStyle(fontSize: 16)),
+          ),
+          TextButton(
+            onPressed: (){
+              Navigator.pop(context);
+              RunAcceptOrNotAccept(Flag,txt_1.text,Flag_Desc);
+            },
+            child:  Text('بله',style: TextStyle(fontSize: 16),),
+          ),
+        ],
+      ),
+    )) ?? false;
+  }
   Future RunAcceptOrNotAccept(bool Flag,String Com,bool Flag_Desc) async{
 
 
-     if(Flag_Desc==true)
-      {
-        if(Com==null||Com.isEmpty)
-        {
-          ApiService.ShowSnackbar('توضیحات خود را وارد کنید');
-          return;
-        }
-      }
+
 
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -87,6 +117,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
         countChkInWay=Data.res.countChkInWay;
         priceChkInWay=Data.res.priceChkInWay;
         Etebar=Data.res.etebar;
+        Man=Data.res.Man;
+        Takhfif=Data.res.Takhfif;
         setState(() {
 
         });
@@ -358,7 +390,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               ),),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
-                              child: Text(Etebar,
+                              child: Text(Man,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: ColorSecond,
@@ -391,7 +423,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               ),),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
-                              child: Text(Etebar,
+                              child: Text(Takhfif,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: ColorSecond,
@@ -537,7 +569,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               });
                               return;
                             }
-                          RunAcceptOrNotAccept(false,txt_1.text,Flag_Desc);
+                          _onWillPop(false);
+
                         },
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(Color(0xff5E5E5E)),
@@ -558,7 +591,8 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                       child: Container(
                         margin: EdgeInsets.only(left: 8,top: 16),
                         child: ElevatedButton(onPressed: (){
-                          RunAcceptOrNotAccept(false,txt_1.text,Flag_Desc);
+                          _onWillPop(true);
+
                         },
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(BaseColor),

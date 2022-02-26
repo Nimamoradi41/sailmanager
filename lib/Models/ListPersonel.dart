@@ -43,6 +43,9 @@ class RePerson {
     required this.tell1,
     required this.tell2,
     required this.cell,
+    required this.lat,
+    required this.lng,
+    required this.datetime,
   });
 
   int visRdf;
@@ -50,6 +53,9 @@ class RePerson {
   String tell1;
   String tell2;
   String cell;
+  double lat;
+  double lng;
+  String datetime;
 
   factory RePerson.fromJson(Map<String, dynamic> json) => RePerson(
     visRdf: json["visRdf"],
@@ -57,6 +63,9 @@ class RePerson {
     tell1: json["tell1"],
     tell2: json["tell2"],
     cell: json["cell"],
+    lat: json["lat"],
+    lng: json["lng"],
+    datetime: json["datetime"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -65,5 +74,8 @@ class RePerson {
     "tell1": tell1,
     "tell2": tell2,
     "cell": cell,
+    "lat": lat,
+    "lng": lng,
+    "datetime": datetime,
   };
 }

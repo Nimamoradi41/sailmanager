@@ -14,6 +14,7 @@ import 'package:sailmanager/Models/ModelCity.dart';
 import 'package:sailmanager/Models/ModelProvice.dart';
 import 'package:sailmanager/Models/ModelRegion.dart';
 import 'package:sailmanager/Models/ModelWay.dart';
+import 'package:sailmanager/Screens/PishFactorsCustomer.dart';
 import 'package:sailmanager/Screens/ScreenState.dart';
 import 'package:sailmanager/Screens/ScreenWay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,17 +67,20 @@ class _CustomersState extends State<Customers> {
  }
 
 
+ var base ="";
+ var UserName ="";
+ var Password ="";
 
  Future GetProvi(double s)async {
 
 
 
    SharedPreferences prefs = await SharedPreferences.getInstance();
-   var base =prefs.getString('Baseurl');
-   var UserName =prefs.getString('UserName');
-   var Password =prefs.getString('Password');
-   var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
-   var Data=await ApiService.GetProvice(pr, base!, UserName!, Password!);
+     base =prefs.getString('Baseurl')!;
+     UserName =prefs.getString('UserName')!;
+     Password =prefs.getString('Password')!;
+    var  pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
+   var Data=await ApiService.GetProvice(pr, base, UserName, Password);
 
    pr.hide();
    if(Data!=null)
@@ -108,8 +112,8 @@ class _CustomersState extends State<Customers> {
 
 
 
-  List<Customer_Db> MyData=[];
-  List<Customer_Db> MyDataSourch=[];
+  List<Re_Customer> MyData=[];
+  List<Re_Customer> MyDataSourch=[];
   List<ReCustGroup_2> ReCustGroup=[];
   List<Re_Provice> ReRe_Provice=[];
   List<ReC_City> ReRe_ReC=[];
@@ -128,11 +132,13 @@ class _CustomersState extends State<Customers> {
   String dropdownValue = 'همه';
   String dropdownProvice = '';
   String StatusAccontValue = 'همه';
+  String flagAccount = '0';
+  String groupId = '-1';
 
-  String IdProvine="";
-  String IdCity="";
-  String IdState="";
-  String IdWay="";
+  String IdProvine="-1";
+  String IdCity="-1";
+  String IdState="-1";
+  String IdWay="-1";
   String NameCity="شهر را انتخاب کنید";
   String NameState="منطقه را انتخاب کنید";
   String NameWay="مسیر را انتخاب کنید";
@@ -173,6 +179,22 @@ class _CustomersState extends State<Customers> {
                               fontSize: 12,fontFamily: 'iransans'),
                           onChanged: (s){
                             setState(() {
+                              if(s.toString()=='همه')
+                                {
+                                  flagAccount="0";
+                                }
+
+                              if(s.toString()=='بدهکار')
+                              {
+                                flagAccount="1";
+                              }
+
+
+                              if(s.toString()=='بستانکار')
+                              {
+                                flagAccount="2";
+                              }
+
                               StatusAccontValue = s.toString();
                             });
                           },
@@ -216,6 +238,11 @@ class _CustomersState extends State<Customers> {
                           style: TextStyle(color: BaseColor, fontSize: 12,fontFamily: 'iransans'),
                           onChanged: (s){
                             setState(() {
+                              var dds=ReCustGroup.where((element) =>element==s.toString()).toList();
+                              if(dds.length>0)
+                                {
+                                  groupId=dds[0].id.toString();
+                                }
                               dropdownValue = s.toString();
                             });
                           },
@@ -470,6 +497,7 @@ class _CustomersState extends State<Customers> {
 
 
 
+
   ShowModall_GetPrivice(List<Re_Provice> data)
   {
 
@@ -486,7 +514,7 @@ class _CustomersState extends State<Customers> {
                 onTap: ()
                 {
                   Provicemain=data[item].id ;
-                  Filter(MyDataSourch,Groupmain,Provicemain,0,0,0,ctx,true);
+
                 },
                 child: Column(
                   children: [
@@ -527,7 +555,7 @@ class _CustomersState extends State<Customers> {
                 onTap: ()
                 {
                   Citymain=data[item].id as int ;
-                  Filter(MyDataSourch,Groupmain,Provicemain,Citymain,0,0,ctx,true);
+
                 },
                 child: Column(
                   children: [
@@ -553,15 +581,15 @@ class _CustomersState extends State<Customers> {
 
 
 
-  int Groupmain=-7;
-  String Provicemain='-7';
-  int Citymain=-7;
+  int Groupmain=-1;
+  String Provicemain='-1';
+  int Citymain=-1;
   Future GetData()async{
      var Data=await DataBseFile().GetCustomer();
      var Data2=await DataBseFile().GetCusgroups();
      var Data3=await DataBseFile().GetPrivice();
      var Data4=await DataBseFile().GetCity();
-     ReCustGroup.add(ReCustGroup_2(id: -7, name: 'همه'));
+     ReCustGroup.add(ReCustGroup_2(id: -1, name: 'همه'));
      // ReRe_Provice.add(Re_Provice(id:'-7', name: 'همه'));
      // ReRe_ReC.add(ReC_City(id: -7,name:'' ,provinceId: -7));
      // ReCustGroup.addAll(Data2);
@@ -582,52 +610,62 @@ class _CustomersState extends State<Customers> {
 
 
 
-  Future Filter(List<Customer_Db> DSource,int Group,String Privince,int City ,int state,int way,BuildContext buildContext,bool flag) async{
-
-    if(Group!=-7)
-      {
-        MyData=  await  DSource.where((element) => element.groupId==Group).toList();
-      }else{
-      MyData=  await  DSource;
-    }
-
-
-    if(Privince!='-7')
-    {
-      MyData=  await  MyData.where((element) => element.provinceId.toString()==Privince).toList();
-    }
 
 
 
-    if(City!='-7')
-    {
-      MyData=  await  MyData.where((element) => element.cityId.toString()==City).toList();
-    }
-
-
-
-    if(flag)
-      {
-        Navigator.pop(buildContext);
-      }
-
-    setState(() {
-
-    });
-
-    print(MyData.length.toString());
+  Future get2()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    base =prefs.getString('Baseurl')!;
+    UserName =prefs.getString('UserName')!;
+    Password =prefs.getString('Password')!;
+    Run22();
   }
-
-
-
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     GetData();
+    get2();
 
   }
+
+
+  Future Run22()async{
+    var MyDataCustomer = await ApiService.GetCustomer( base, UserName, Password, groupId,
+        IdProvine, IdCity, IdState, IdWay,'',flagAccount.toString());
+    if(MyDataCustomer!=null)
+    {
+      if(MyDataCustomer.res.length==0)
+      {
+
+        MyData.clear();
+        MyDataSourch.clear();
+        setState(() {
+        });
+      }else{
+        setState(() {
+          MyDataSourch=MyDataCustomer.res;
+          MyData=MyDataCustomer.res;
+        });
+      }
+    }else{
+      MyData.clear();
+      MyDataSourch.clear();
+    }
+
+
+    setState(() {
+
+    });
+  }
+
+
+
+
+  List<Re_Customer> MyDataCustomer=[];
+
+
 
 
   @override
@@ -655,32 +693,41 @@ class _CustomersState extends State<Customers> {
                             child: Directionality(
                               textDirection: TextDirection.rtl,
                               child: TextField(
-                                onChanged: (val){
+                                onChanged: (val) async{
                                   if(val.isNotEmpty)
                                   {
                                     // val=val.replaceAll('ی','ي');
                                     // val=val.replaceAll('ک','ك');
-                                    MyData =MyDataSourch.where((i) =>
-                                          i.name.contains(val)
-                                        ||i.address.contains(val.toString())
-                                        ||i.tell2.contains(val.toString())
-                                        ||i.tell1.contains(val)).toList();
-                                    if(MyData.length==0)
-                                    {
-                                      MyData.clear();
-                                    }else{
-                                      Filter(MyData, Groupmain,Provicemain, 0, 0, 0, context,false);
-                                    }
+                                    var MyDataCustomer = await ApiService.GetCustomer( base, UserName, Password, groupId,
+                                        IdProvine, IdCity, IdState, IdWay,val.toString(),flagAccount.toString());
+                                    if(MyDataCustomer!=null)
+                                      {
+                                        if(MyDataCustomer.res.length==0)
+                                        {
 
+                                          MyData.clear();
+                                          MyDataSourch.clear();
+                                          setState(() {
+                                          });
+                                        }else{
+                                          setState(() {
+                                            MyDataSourch=MyDataCustomer.res;
+                                            MyData=MyDataCustomer.res;
+                                          });
+                                        }
+                                      }else{
+                                      MyData.clear();
+                                      MyDataSourch.clear();
+                                    }
 
                                     setState(() {
 
                                     });
-
                                   }else{
+                                    MyDataSourch.clear();
                                     // print(Customer.length.toString());
                                     setState(() {
-                                      MyData=MyDataSourch;
+
                                     });
 
                                   }
@@ -700,12 +747,16 @@ class _CustomersState extends State<Customers> {
                       ],
                     ),
                     Expanded(
-                      child:   MyData.length>0? ListView.builder(
-                        itemCount: MyData.length>30?MyData.take(30).length:
-                                   MyData.length,
+                      child:   MyDataSourch.length>0? ListView.builder(
+                        itemCount: MyDataSourch.length>30?MyDataSourch.take(30).length:
+                        MyDataSourch.length,
                         itemBuilder: (Ctx,Item){
-                          return  BoxInfo78(Sizewid,MyData[Item].name,'',MyData[Item].tell1,MyData[Item].tell2,
-                              MyData[Item].address.trim(),(){},(){});
+                          return  BoxInfo78(Sizewid,MyDataSourch[Item].name.trim(),'',MyDataSourch[Item].tell1,MyDataSourch[Item].tell2,
+                              MyDataSourch[Item].address.trim(),(){
+                                print('dlvl,dvl,,ldlv,');
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => PishFactorsCustomer(MyDataSourch[Item].id) ));
+                              },(){},MyDataSourch[Item].id);
                         },
                       ):Center(
                         child:  Center(
@@ -736,7 +787,7 @@ class _CustomersState extends State<Customers> {
                         children: [
                           GestureDetector(
                             onTap: (){
-
+                              Run22();
                             },
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -842,10 +893,11 @@ class BoxInfo78 extends StatelessWidget {
   final String Address;
   final   VoidCallback  Factors;
   final VoidCallback Location;
+  final String ID;
 
 
   BoxInfo78(this.Sizewid, this.NameMoshtari, this.Mobile, this.Tel1, this.Tel2,
-      this.Address, this.Factors, this.Location);
+      this.Address, this.Factors, this.Location,this.ID);
 
   @override
   Widget build(BuildContext context) {
@@ -879,7 +931,7 @@ class BoxInfo78 extends StatelessWidget {
                       fontSize: SizeFirst
                   ),),
                   Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
+                    padding: const EdgeInsets.only(top: 4.0,left: 8,right: 8),
                     child: FittedBox(
                       fit: BoxFit.cover,
                       child: Text(NameMoshtari==null||
@@ -917,7 +969,8 @@ class BoxInfo78 extends StatelessWidget {
                             fit: BoxFit.cover,
                             child: Text(Mobile==null||
                                 Mobile.isEmpty?'نامشخص':
-                            Mobile,style:
+                            Mobile,
+                              style:
                             TextStyle(
                                 color: ColorSecond,
                                 fontSize: SizeSecond
@@ -931,7 +984,7 @@ class BoxInfo78 extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       color: ColorLine
                       ,width: 2,
-                      height: Sizewid*1/7),
+                      height: Sizewid*1/10),
                   Expanded(
                     child: Column(
                       children: [
@@ -960,7 +1013,7 @@ class BoxInfo78 extends StatelessWidget {
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       color: ColorLine
                       ,width: 2,
-                      height: Sizewid*1/7),
+                      height: Sizewid*1/10),
                   Expanded(
                     child: Column(
                       children: [
@@ -985,7 +1038,6 @@ class BoxInfo78 extends StatelessWidget {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -1007,7 +1059,7 @@ class BoxInfo78 extends StatelessWidget {
                     margin: EdgeInsets.symmetric(horizontal: 4,vertical: 4),
                     color: ColorLine
                     ,width: 2,
-                    height:  Sizewid*1/7),
+                    height:  Sizewid*1/10),
                 GestureDetector(
                   onTap: Location,
                   child: Padding(
@@ -1026,7 +1078,7 @@ class BoxInfo78 extends StatelessWidget {
                           fontSize: SizeFirst
                       ),),
                       Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
+                        padding: const EdgeInsets.only(top: 4.0,left: 8,right: 8),
                         child: FittedBox(
                           fit: BoxFit.cover,
                           child: Text(Address==null||

@@ -44,7 +44,10 @@ class Res_DetailFactor {
     required   this.countChkReturn,
     required  this.priceChkReturn,
     required  this.etebar,
+    required  this.Man,
+    required  this.Takhfif,
   });
+
 
   List<ListKala> listKala;
   String countChkInWay;
@@ -52,6 +55,9 @@ class Res_DetailFactor {
   String countChkReturn;
   String priceChkReturn;
   String etebar;
+  String Takhfif;
+  String Man;
+
 
   factory Res_DetailFactor.fromJson(Map<String, dynamic> json) => Res_DetailFactor(
     listKala: List<ListKala>.from(json["listKala"].map((x) => ListKala.fromJson(x))),
@@ -60,6 +66,8 @@ class Res_DetailFactor {
     countChkReturn: json["countChkReturn"],
     priceChkReturn: json["priceChkReturn"],
     etebar: json["Etebar"],
+    Takhfif: json["Takhfif"],
+    Man: json["Man"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -69,6 +77,8 @@ class Res_DetailFactor {
     "countChkReturn": countChkReturn,
     "priceChkReturn": priceChkReturn,
     "Etebar": etebar,
+    "Man": Man,
+    "Takhfif": Takhfif,
   };
 }
 

@@ -13,86 +13,59 @@ class ListCustomer {
     required this.code,
     required  this.msg,
     required this.error,
-    required this.res,
+    required  this.res,
   });
 
   int code;
   String msg;
   bool error;
-  Res res;
+  List<Re_Customer> res;
 
   factory ListCustomer.fromJson(Map<String, dynamic> json) => ListCustomer(
     code: json["code"],
     msg: json["msg"],
     error: json["error"],
-    res: Res.fromJson(json["res"]),
+    res: List<Re_Customer>.from(json["res"].map((x) => Re_Customer.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "code": code,
     "msg": msg,
     "error": error,
-    "res": res.toJson(),
+    "res": List<dynamic>.from(res.map((x) => x.toJson())),
   };
 }
 
-class Res {
-  Res({
-    required  this.list,
-    required this.count,
-    required this.page,
-  });
-
-  List<Customer_Db> list;
-  int count;
-  int page;
-
-  factory Res.fromJson(Map<String, dynamic> json) => Res(
-    list: List<Customer_Db>.from(json["list"].map((x) => Customer_Db.fromJson(x))),
-    count: json["count"],
-    page: json["page"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "list": List<dynamic>.from(list.map((x) => x.toJson())),
-    "count": count,
-    "page": page,
-  };
-}
-
-class Customer_Db {
-  Customer_Db({
-    required   this.id,
-    required  this.name,
-    required this.tell1,
+class Re_Customer {
+  Re_Customer({
+    required this.id,
+    required this.name,
+    required  this.tell1,
     required this.tell2,
-    // required this.phone,
     required this.groupId,
     required this.address,
     required this.provinceId,
-    required this.cityId,
-    required this.masirId,
+    required  this.cityId,
+    required  this.masirId,
     required this.reginId,
   });
 
-  int id;
+  String id;
   String name;
   String tell1;
   String tell2;
-  // String phone='';
-  int groupId;
+  String groupId;
   String address;
-  int provinceId;
-  int cityId;
-  int masirId;
-  int reginId;
+  String provinceId;
+  String cityId;
+  String masirId;
+  String reginId;
 
-  factory Customer_Db.fromJson(Map<String, dynamic> json) => Customer_Db(
+  factory Re_Customer.fromJson(Map<String, dynamic> json) => Re_Customer(
     id: json["id"],
     name: json["name"],
     tell1: json["tell1"],
     tell2: json["tell2"],
-    // phone: json["phone"],
     groupId: json["groupId"],
     address: json["address"],
     provinceId: json["provinceId"],
@@ -102,16 +75,15 @@ class Customer_Db {
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id.toString(),
+    "id": id,
     "name": name,
     "tell1": tell1,
     "tell2": tell2,
-    // "phone": phone,
-    "groupId": groupId.toString(),
+    "groupId": groupId,
     "address": address,
-    "provinceId": provinceId.toString(),
-    "cityId": cityId.toString(),
-    "masirId": masirId.toString(),
-    "reginId": reginId.toString(),
+    "provinceId": provinceId,
+    "cityId": cityId,
+    "masirId": masirId,
+    "reginId": reginId,
   };
 }
