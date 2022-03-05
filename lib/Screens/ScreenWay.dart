@@ -32,14 +32,26 @@ class _ScreenWayState extends State<ScreenWay> {
     Baseurl=  prefs.getString("Baseurl")!;
     UserName=  prefs.getString("UserName")!;
     Password=  prefs.getString("Password")!;
-
+   Run();
   }
 
 
   List<ReWay> datamian=[];
 
 
+  Future Run()async {
+    var ss = await ApiService.GetWay(
+        Baseurl, UserName, Password, widget.IdState, '');
 
+    setState(() {
+      if(ss.res.length>0)
+      {
+        datamian=ss.res;
+      }else{
+        datamian.clear();
+      }
+    });
+  }
 
   @override
   void initState() {

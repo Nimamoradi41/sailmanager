@@ -3,12 +3,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:sailmanager/Models/ModelFactorsAll.dart';
+import 'package:sailmanager/Models/ModelPIshfactorsNotAccept.dart';
 import 'package:sailmanager/Models/Pickers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ApiService.dart';
 import '../Constants.dart';
 import 'dart:math' as math;
+
+import 'DetailPishFactor.dart';
 class PishFactorsAll extends StatefulWidget {
   const PishFactorsAll({Key? key}) : super(key: key);
 
@@ -266,7 +269,7 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
           Column(
             children: [
               Container(
-                margin: EdgeInsets.all(8),
+                margin: EdgeInsets.all(4),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: BaseColor)
@@ -292,7 +295,7 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                     Container(
                       width: 2,
                       color: ColorLine,
-                      height: Sizewid*1/7,
+                      height: Sizewid*1/SizeResponsive,
                     ),
                     Expanded(child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -324,16 +327,34 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                           itemCount: MyDate.length,
                           itemBuilder: (ctx,item){
                             return
-                              BoxInfo_77(
-                                  Sizewid,MyDate[item].customerName,MyDate[item].date,MyDate[item].tedVah,MyDate[item].tedJoz,MyDate[item].tedKol,
-                                  MyDate[item].payment,
-                                  MyDate[item].flag==1?'تایید شده':
-                                  MyDate[item].flag==2?'در انتظار تایید':
-                                  'عدم تایید'
-                                  ,Colors.white,
-                                  MyDate[item].flag==1?Color(0xff4E9F3D):
-                                  MyDate[item].flag==2?BaseColor:
-                                  Color(0xffE02401)
+                              GestureDetector(
+                                onTap: (){
+                                  Re_NotAccept ss=Re_NotAccept(
+                                      date: MyDate[item].date,
+                                      customerName: MyDate[item].customerName
+                                      , flag: MyDate[item].flag,
+                                       tedJoz: MyDate[item].tedJoz
+                                       , id:   MyDate[item].id,
+                                       tedKol: MyDate[item].tedKol
+                                      , tedVah: MyDate[item].tedVah
+                                      , payment: MyDate[item].payment);
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context)
+                                          => DetailPishFactor(MyDate[item].id.toString(),ss,false)));
+                                },
+                                child: BoxInfo_77(
+                                    Sizewid,MyDate[item].customerName,MyDate[item].date,MyDate[item].tedVah,MyDate[item].tedJoz,MyDate[item].tedKol,
+                                    MyDate[item].payment,
+                                    MyDate[item].flag==1?'تایید شده':
+                                    MyDate[item].flag==2?'در انتظار تایید':
+                                    'عدم تایید'
+                                    ,Colors.white,
+                                    MyDate[item].flag==1?Color(0xff4E9F3D):
+                                    MyDate[item].flag==2?BaseColor:
+                                    Color(0xffE02401),
+                                    MyDate[item].id.toString()
+                                ),
                               );
 
 
@@ -466,7 +487,8 @@ class _PishFactorsAllState extends State<PishFactorsAll> {
                             borderRadius: BorderRadius.circular(16)
                         ),
                         child: Center(
-                          child: Icon(Icons.category_outlined,color: Colors.white,size: 35,),
+                          // child: Icon(Icons.category_outlined,color: Colors.white,size: 35,),
+                          child: Image.asset('images/menu.png',width: 30,height: 30,),
                         ),
                       ),
                     ),
@@ -597,7 +619,8 @@ class BoxInfo_77 extends StatelessWidget {
       this.Value6,
       this.Value7,
       this.ColorText,
-      this.ColorBack);
+      this.ColorBack,
+      this.DataFactor);
 
 
   final double Sizewid;
@@ -612,6 +635,7 @@ class BoxInfo_77 extends StatelessWidget {
 
   Color ColorText;
   Color ColorBack;
+  String DataFactor;
 
   @override
   Widget build(BuildContext context) {
@@ -642,7 +666,7 @@ class BoxInfo_77 extends StatelessWidget {
                     'نامشخص':Value7,style:
                     TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                         fontWeight: FontWeight.bold
                     ),),
                   ),
@@ -684,17 +708,27 @@ class BoxInfo_77 extends StatelessWidget {
                               margin: EdgeInsets.symmetric(horizontal: 4),
                                 color: ColorLine
                               ,width: 2,
-                              height: Sizewid*1/7),
+                              height: Sizewid*1/SizeResponsive),
                             Expanded(child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text('نام مشتری',style:
-                                  TextStyle(
-                                      color: ColorFirst,
-                                      fontSize: SizeFirst
-                                  ),),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(DataFactor+' : شماره فاکتور',
+                                        style: TextStyle(
+                                            fontSize: SizeFirst,
+                                            color: ColorFirst
+                                        ),),
+                                      Text('نام مشتری',style:
+                                      TextStyle(
+                                          color: ColorFirst,
+                                          fontSize: SizeFirst
+                                      ),),
+                                    ],
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0,right: 8),
                                     child: Text(Value1==null||Value1.isEmpty?
@@ -743,7 +777,7 @@ class BoxInfo_77 extends StatelessWidget {
                                 margin: EdgeInsets.symmetric(horizontal: 4),
                                 color: ColorLine
                                 ,width: 2,
-                                height: Sizewid*1/7),
+                                height: Sizewid*1/SizeResponsive),
                             Expanded(
                               child: Column(
                                 children: [
@@ -768,7 +802,7 @@ class BoxInfo_77 extends StatelessWidget {
                                 margin: EdgeInsets.symmetric(horizontal: 4),
                                 color: ColorLine
                                 ,width: 2,
-                                height: Sizewid*1/7),
+                                height: Sizewid*1/SizeResponsive),
                             Expanded(
                               child: Column(
                                 children: [
@@ -793,7 +827,7 @@ class BoxInfo_77 extends StatelessWidget {
                                 margin: EdgeInsets.symmetric(horizontal: 4),
                                 color: ColorLine
                                 ,width: 2,
-                                height: Sizewid*1/7),
+                                height: Sizewid*1/SizeResponsive),
                             Expanded(
                               child: Column(
                                 children: [
@@ -823,7 +857,6 @@ class BoxInfo_77 extends StatelessWidget {
                     ),
                   ),
                 ))
-
               ],
             ),
           )

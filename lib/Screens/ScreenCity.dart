@@ -31,7 +31,7 @@ class _ScreenCityState extends State<ScreenCity> {
     Baseurl=  prefs.getString("Baseurl")!;
     UserName=  prefs.getString("UserName")!;
     Password=  prefs.getString("Password")!;
-
+    Run();
   }
 
   List<ReC_City> datamian=[];
@@ -42,6 +42,23 @@ class _ScreenCityState extends State<ScreenCity> {
     super.initState();
     GetLogins();
   }
+
+
+  Future Run()async {
+    var ss = await ApiService.GetCity(
+        Baseurl, UserName, Password, widget.IdProvice, '');
+
+    setState(() {
+      if(ss.res.length>0)
+      {
+        datamian=ss.res;
+      }else{
+        datamian.clear();
+      }
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

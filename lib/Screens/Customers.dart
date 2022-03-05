@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:sailmanager/ApiService.dart';
 import 'package:sailmanager/DataBseFile.dart';
@@ -18,6 +19,7 @@ import 'package:sailmanager/Screens/PishFactorsCustomer.dart';
 import 'package:sailmanager/Screens/ScreenState.dart';
 import 'package:sailmanager/Screens/ScreenWay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Constants.dart';
 import 'ScreenCity.dart';
@@ -109,7 +111,14 @@ class _CustomersState extends State<Customers> {
 
 
 
-
+ Future<void> openMap(double latitude, double longitude) async {
+   String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+   if (await canLaunch(googleUrl)) {
+     await launch(googleUrl);
+   } else {
+     throw 'Could not open the map.';
+   }
+ }
 
 
   List<Re_Customer> MyData=[];
@@ -621,19 +630,20 @@ class _CustomersState extends State<Customers> {
     Run22();
   }
 
+  late ProgressDialog pr;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     GetData();
     get2();
-
+       pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
   }
 
 
   Future Run22()async{
     var MyDataCustomer = await ApiService.GetCustomer( base, UserName, Password, groupId,
-        IdProvine, IdCity, IdState, IdWay,'',flagAccount.toString());
+        IdProvine, IdCity, IdState, IdWay,'',flagAccount.toString(),true,pr);
     if(MyDataCustomer!=null)
     {
       if(MyDataCustomer.res.length==0)
@@ -671,6 +681,7 @@ class _CustomersState extends State<Customers> {
   @override
   Widget build(BuildContext context) {
     var Sizewid=MediaQuery.of(context).size.width;
+    final oCcy = new NumberFormat(",###", "en_US");
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorBack,
@@ -690,56 +701,54 @@ class _CustomersState extends State<Customers> {
                         Expanded(
                           child: Card(
                            margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-                            child: Directionality(
-                              textDirection: TextDirection.rtl,
-                              child: TextField(
-                                onChanged: (val) async{
-                                  if(val.isNotEmpty)
-                                  {
-                                    // val=val.replaceAll('ی','ي');
-                                    // val=val.replaceAll('ک','ك');
-                                    var MyDataCustomer = await ApiService.GetCustomer( base, UserName, Password, groupId,
-                                        IdProvine, IdCity, IdState, IdWay,val.toString(),flagAccount.toString());
-                                    if(MyDataCustomer!=null)
+                            child: TextField(
+                              textAlign: TextAlign.end,
+                              onChanged: (val) async{
+                                if(val.isNotEmpty)
+                                {
+                                  // val=val.replaceAll('ی','ي');
+                                  // val=val.replaceAll('ک','ك');
+                                  var MyDataCustomer = await ApiService.GetCustomer( base, UserName, Password, groupId,
+                                      IdProvine, IdCity, IdState, IdWay,val.toString(),flagAccount.toString(),false,pr);
+                                  if(MyDataCustomer!=null)
+                                    {
+                                      if(MyDataCustomer.res.length==0)
                                       {
-                                        if(MyDataCustomer.res.length==0)
-                                        {
 
-                                          MyData.clear();
-                                          MyDataSourch.clear();
-                                          setState(() {
-                                          });
-                                        }else{
-                                          setState(() {
-                                            MyDataSourch=MyDataCustomer.res;
-                                            MyData=MyDataCustomer.res;
-                                          });
-                                        }
+                                        MyData.clear();
+                                        MyDataSourch.clear();
+                                        setState(() {
+                                        });
                                       }else{
-                                      MyData.clear();
-                                      MyDataSourch.clear();
-                                    }
-
-                                    setState(() {
-
-                                    });
-                                  }else{
+                                        setState(() {
+                                          MyDataSourch=MyDataCustomer.res;
+                                          MyData=MyDataCustomer.res;
+                                        });
+                                      }
+                                    }else{
+                                    MyData.clear();
                                     MyDataSourch.clear();
-                                    // print(Customer.length.toString());
-                                    setState(() {
-
-                                    });
-
                                   }
-                                },
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(8),
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                        color: Color(0xff1F3C84).withOpacity(0.80)
-                                    ),
-                                    hintText: 'مشتری خود را جستجو کنید...'
-                                ),
+
+                                  setState(() {
+
+                                  });
+                                }else{
+                                  MyDataSourch.clear();
+                                  // print(Customer.length.toString());
+                                  setState(() {
+
+                                  });
+
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(8),
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      color: Color(0xff1F3C84).withOpacity(0.80)
+                                  ),
+                                  hintText: 'مشتری خود را جستجو کنید...'
                               ),
                             ),
                           ),
@@ -748,15 +757,32 @@ class _CustomersState extends State<Customers> {
                     ),
                     Expanded(
                       child:   MyDataSourch.length>0? ListView.builder(
-                        itemCount: MyDataSourch.length>30?MyDataSourch.take(30).length:
-                        MyDataSourch.length,
+                        itemCount: MyDataSourch.length,
                         itemBuilder: (Ctx,Item){
+
                           return  BoxInfo78(Sizewid,MyDataSourch[Item].name.trim(),'',MyDataSourch[Item].tell1,MyDataSourch[Item].tell2,
                               MyDataSourch[Item].address.trim(),(){
                                 print('dlvl,dvl,,ldlv,');
                                 Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) => PishFactorsCustomer(MyDataSourch[Item].id) ));
-                              },(){},MyDataSourch[Item].id);
+                              },(){
+
+                            if(MyDataSourch[Item].lat==null||MyDataSourch[Item].lng==null)
+                              return;
+
+                            if(MyDataSourch[Item].lat!=0&&MyDataSourch[Item].lng!=0)
+                              {
+                                openMap(MyDataSourch[Item].lat, MyDataSourch[Item].lng);
+                              }
+
+                              },MyDataSourch[Item].id,
+
+                              MyDataSourch[Item].man.contains('.')?
+
+                              oCcy.format(int.parse(MyDataSourch[Item].man.replaceAll('.','')))
+                                  :''
+                              
+                              ,MyDataSourch[Item].lat,MyDataSourch[Item].lng);
                         },
                       ):Center(
                         child:  Center(
@@ -784,79 +810,115 @@ class _CustomersState extends State<Customers> {
                       padding: const EdgeInsets.only(right: 8,left: 8,top: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          GestureDetector(
-                            onTap: (){
-                              Run22();
-                            },
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(right: 8),
-                                  height: 45,
-                                  width: 45,
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: BaseColor.withOpacity(0.25),
-                                            spreadRadius: 2,
-                                            blurRadius: 8
-                                        )
-                                      ],
-                                      color: BaseColor,
-                                      borderRadius: BorderRadius.circular(8)
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: (){
+                                Run22();
+                              },
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(right: 8),
+                                    height: 45,
+                                    width: 45,
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: BaseColor.withOpacity(0.25),
+                                              spreadRadius: 2,
+                                              blurRadius: 8
+                                          )
+                                        ],
+                                        color: BaseColor,
+                                        borderRadius: BorderRadius.circular(8)
+                                    ),
+                                    child: Icon(Icons.refresh,color: Colors.white,size: 25,),
                                   ),
-                                  child: Icon(Icons.refresh,color: Colors.white,size: 25,),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text('دریافت مجدد',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                  TextStyle(
-                                      color: ColorFirst,
-                                      fontSize: 12
-                                  ),),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                    child: Text('دریافت اطلاعات',
+                                      textAlign: TextAlign.center,
+                                      style:
+                                    TextStyle(
+                                        color: ColorFirst,
+                                        fontSize: 12
+                                    ),),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: (){
-                              if(ReCustGroup.length>2)
-                                {
-                                  ShowModall_CusGroups(ReCustGroup,Sizewid);
-                                }else{
-                                GetGroups(Sizewid);
-                              }
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: (){
+                                if(ReCustGroup.length>2)
+                                  {
+                                    ShowModall_CusGroups(ReCustGroup,Sizewid);
+                                  }else{
+                                  GetGroups(Sizewid);
+                                }
 
-                            },
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 8),
+                                    height: 45,
+                                    width: 45,
+                                    decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: BaseColor.withOpacity(0.25),
+                                              spreadRadius: 2,
+                                              blurRadius: 8
+                                          )
+                                        ],
+                                        color: BaseColor,
+                                        borderRadius: BorderRadius.circular(8)
+                                    ),
+                                    child: Center(
+                                      child: SvgPicture.asset('images/cate23.svg',width: 15,height: 15,color: Colors.white,),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                    child: Text('فیلتر',
+                                      textAlign: TextAlign.center,
+                                      style:
+                                      TextStyle(
+                                          color: ColorFirst,
+                                          fontSize: 12
+                                      ),),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: Sizewid*1/SizeResponsive,
+                            width: 2,
+                            color: ColorLine,
+                          ),
+                          Expanded(
                             child: Column(
                               children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 8),
-                                  height: 45,
-                                  width: 45,
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: BaseColor.withOpacity(0.25),
-                                            spreadRadius: 2,
-                                            blurRadius: 8
-                                        )
-                                      ],
-                                      color: BaseColor,
-                                      borderRadius: BorderRadius.circular(8)
-                                  ),
-                                  child: Center(
-                                    child: SvgPicture.asset('images/cate23.svg',width: 15,height: 15,color: Colors.white,),
-                                  ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Text('تعداد مشتری',
+                                    textAlign: TextAlign.center,
+                                    style:
+                                    TextStyle(
+                                        color: ColorFirst,
+                                        fontSize: 12
+                                    ),),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 4.0),
-                                  child: Text('فیلتر',
+                                  child: Text(MyDataSourch.length.toString(),
                                     textAlign: TextAlign.center,
                                     style:
                                     TextStyle(
@@ -894,11 +956,25 @@ class BoxInfo78 extends StatelessWidget {
   final   VoidCallback  Factors;
   final VoidCallback Location;
   final String ID;
+  final String Mande;
+  final double lat;
+  final double lng;
+
 
 
   BoxInfo78(this.Sizewid, this.NameMoshtari, this.Mobile, this.Tel1, this.Tel2,
-      this.Address, this.Factors, this.Location,this.ID);
+      this.Address, this.Factors, this.Location,this.ID,this.Mande,this.lat,this.lng);
 
+
+
+  _launchCaller3(String string2) async {
+    String url = 'tel:'+string2;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('Not CAnt');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -922,27 +998,67 @@ class BoxInfo78 extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              child: Row(
                 children: [
-                  Text('مشتری',style:
-                  TextStyle(
-                      color: ColorFirst,
-                      fontSize: SizeFirst
-                  ),),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0,left: 8,right: 8),
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: Text(NameMoshtari==null||
-                          NameMoshtari.isEmpty?'نامشخص':
-                      NameMoshtari,style:
+                  Expanded(
+                      flex: 2,
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('مانده',style:
                       TextStyle(
-                          color: ColorSecond,
-                          fontSize: SizeSecond
+                          color: ColorFirst,
+                          fontSize: SizeFirst
                       ),),
-                    ),
-                  )
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4.0,left: 4,right: 4),
+                        child: FittedBox(
+                          fit: BoxFit.cover,
+                          child: Text(Mande==null||
+                              Mande.isEmpty?'نامشخص':
+
+                          Mande,
+                            textAlign: TextAlign.center,
+                            style:
+                          TextStyle(
+                              color: ColorSecond,
+                              fontSize: SizeSecond
+                          ),),
+                        ),
+                      )
+                    ],
+                  )),
+                  Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      color: ColorLine
+                      ,width: 2,
+                      height: Sizewid*1/10),
+                  Expanded(
+                      flex: 8,
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text('مشتری',style:
+                      TextStyle(
+                          color: ColorFirst,
+                          fontSize: SizeFirst
+                      ),),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4.0,left: 8,right: 8),
+                        child: FittedBox(
+                          fit: BoxFit.cover,
+                          child: Text(NameMoshtari==null||
+                              NameMoshtari.isEmpty?'نامشخص':
+                          NameMoshtari,style:
+                          TextStyle(
+                              color: ColorSecond,
+                              fontSize: SizeSecond
+                          ),),
+                        ),
+                      )
+                    ],
+                  ))
+
                 ],
               ),
             ),
@@ -963,18 +1079,27 @@ class BoxInfo78 extends StatelessWidget {
                             color: ColorFirst,
                             fontSize: SizeFirst
                         ),),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(Mobile==null||
-                                Mobile.isEmpty?'نامشخص':
-                            Mobile,
-                              style:
-                            TextStyle(
-                                color: ColorSecond,
-                                fontSize: SizeSecond
-                            ),),
+                        GestureDetector(
+                          onTap: (){
+                            if(Mobile.isNotEmpty)
+                              {
+                                _launchCaller3(Mobile);
+                              }
+
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              child: Text(Mobile==null||
+                                  Mobile.isEmpty?'نامشخص':
+                              Mobile,
+                                style:
+                              TextStyle(
+                                  color: ColorSecond,
+                                  fontSize: SizeSecond
+                              ),),
+                            ),
                           ),
                         )
                       ],
@@ -993,17 +1118,26 @@ class BoxInfo78 extends StatelessWidget {
                             color: ColorFirst,
                             fontSize: SizeFirst
                         ),),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(Tel1==null||
-                                Tel1.isEmpty?'نامشخص':
-                            Tel1,style:
-                            TextStyle(
-                                color: ColorSecond,
-                                fontSize: SizeSecond
-                            ),),
+                        GestureDetector(
+                          onTap: (){
+                            if(Tel2.isNotEmpty)
+                            {
+                              print('89');
+                              _launchCaller3(Tel1);
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              child: Text(Tel2==null||
+                                  Tel2.isEmpty?'نامشخص':
+                              Tel2,style:
+                              TextStyle(
+                                  color: ColorSecond,
+                                  fontSize: SizeSecond
+                              ),),
+                            ),
                           ),
                         )
                       ],
@@ -1022,17 +1156,26 @@ class BoxInfo78 extends StatelessWidget {
                             color: ColorFirst,
                             fontSize: SizeFirst
                         ),),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: FittedBox(
-                            fit: BoxFit.cover,
-                            child: Text(Tel2==null||
-                                Tel2.isEmpty?'نامشخص':
-                            Tel2,style:
-                            TextStyle(
-                                color: ColorSecond,
-                                fontSize: SizeSecond
-                            ),),
+                        GestureDetector(
+                          onTap: (){
+                            if(Tel1.isNotEmpty)
+                            {
+                              print('89');
+                              _launchCaller3(Tel1);
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              child: Text(Tel1==null||
+                                  Tel1.isEmpty?'نامشخص':
+                              Tel1,style:
+                              TextStyle(
+                                  color: ColorSecond,
+                                  fontSize: SizeSecond
+                              ),),
+                            ),
                           ),
                         )
                       ],
@@ -1060,13 +1203,14 @@ class BoxInfo78 extends StatelessWidget {
                     color: ColorLine
                     ,width: 2,
                     height:  Sizewid*1/10),
+                lat!=null && lat>0?
                 GestureDetector(
                   onTap: Location,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: SvgPicture.asset('images/locsale.svg',width: 25,height: 25,),
                   ),
-                ),
+                ):Container(),
                 Expanded(child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

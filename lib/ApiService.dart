@@ -930,30 +930,25 @@ class ApiService{
 
   static Future<ListCustomer> GetCustomer(String Baseurl,String User,String Pass,
       String groupId,String provinceId,String cityId,
-      String regeinId,String masirId,String name,String flagAccount) async{
+      String regeinId,String masirId,String name,String flagAccount,bool flagg,ProgressDialog pr) async{
     var login;
 
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Customer/List');
 
     // print('PageCounterCustomer is'+PageCounterCustomer.toString());
     // ignore: unrelated_type_equality_checks
-    // if(PageCounterCustomer=="0")
-    // {
-    //   pr.style(
-    //     textAlign: TextAlign.center,
-    //     message: ' درحال دریافت لیست مشتری $Counter/$Len ',
-    //     messageTextStyle: TextStyle(
-    //         fontFamily:  'iransans',
-    //         fontSize: 14,
-    //         color: Colors.black87),
-    //   );
-    //   await  pr.show();
-    // }else{
-    //   pr.update(
-    //     message: ' درحال دریافت لیست مشتری $Counter/$Len ',
-    //   );
-    //   print('B');
-    // }
+    if(flagg==true)
+    {
+      pr.style(
+        textAlign: TextAlign.center,
+        message: ' درحال دریافت لیست مشتری    ',
+        messageTextStyle: TextStyle(
+            fontFamily:  'iransans',
+            fontSize: 14,
+            color: Colors.black87),
+      );
+      await  pr.show();
+    }
 
     var map = new Map<String, dynamic>();
     map['login'] = jsonEncode({ "userName":User,
@@ -1017,6 +1012,7 @@ class ApiService{
 
 
     }
+    pr.hide();
     return login;
   }
 

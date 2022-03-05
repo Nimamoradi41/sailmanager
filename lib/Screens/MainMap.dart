@@ -200,6 +200,11 @@ class _MainMapState extends State<MainMap> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Text('نسخه 1.0.0',style: TextStyle(
+                    color: BaseColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12
+                  ),),
                   Expanded(child: Container(
                     child:  Text('حالت های نمایش نقشه',
                       textAlign: TextAlign.end,
@@ -461,7 +466,7 @@ class _MainMapState extends State<MainMap> {
   }
   late Timer _timer;
   updateMarkers() {
-    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
       if(TypeSwitch_Now)
       {
         GetAll();
@@ -473,10 +478,10 @@ class _MainMapState extends State<MainMap> {
   late BitmapDescriptor markerbitmap;
   late BitmapDescriptor markerbitmap2;
   Future GetAll()async{
-      markerbitmap = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(),
-      "images/loc_1.png",
-    );
+    //   markerbitmap = await BitmapDescriptor.fromAssetImage(
+    //   ImageConfiguration(),
+    //   "images/loc_1.png",
+    // );
 
 
 
@@ -505,7 +510,7 @@ class _MainMapState extends State<MainMap> {
                  _Markers.add(
                      Marker(
                          markerId:MarkerId('MarkId'+element.lat.toString()+element.lng.toString()),
-                         icon: markerbitmap,
+                         // icon: markerbitmap,
                          position: LatLng(element.lat,element.lng),
                          infoWindow: InfoWindow(
                              title: element.name,
@@ -568,7 +573,7 @@ class _MainMapState extends State<MainMap> {
       lng: 0, lat: 0, tell1: '', tell2: '', datetime: '',
       visRdf: -9, name: '', cell: '',);
     polylinePoints=PolylinePoints();
-    GetAll();
+    // GetAll();
 
 
 
@@ -757,7 +762,7 @@ class _MainMapState extends State<MainMap> {
                                                  markerId:MarkerId('MarkId'+element.lat.toString()+element.lng.toString()),
                                                  // markerId:MarkerId('MarkId'+uuid.v1().toString()),
                                                  position: LatLng(element.lat,element.lng),
-                                                 icon: markerbitmap,
+                                                 // icon: markerbitmap,
                                                  // visible: true,
                                                  // onTap: (){
                                                  //    controller2.showMarkerInfoWindow(scsc22);

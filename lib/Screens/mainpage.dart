@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -72,15 +72,22 @@ class _mainpageState extends State<mainpage> {
     var  Login= await ApiService.Login(pr,txt_1.text,txt_2.text,txt_3.text);
 
 
+
     if(Login!=null)
     {
        if(Login.res)
          {
 
 
-           prefs.setString("Baseurl", txt_1.text.toString());
-           prefs.setString("UserName", txt_2.text.toString());
-           prefs.setString("Password", txt_3.text.toString());
+
+
+
+           var Baseurl= await Conv_English(txt_1.text.toString());
+           var UserName= await Conv_English(txt_2.text.toString());
+           var Password= await Conv_English(txt_3.text.toString());
+           prefs.setString("Baseurl", Baseurl);
+           prefs.setString("UserName", UserName);
+           prefs.setString("Password", Password);
            prefs.setBool("Login",true);
            prefs.setBool("Remember",Remember);
            pr.hide();
@@ -215,14 +222,13 @@ class _mainpageState extends State<mainpage> {
                      ),
                    ],
                  ),
-
                  Container(
                    margin: EdgeInsets.only(top:SizeApp.height*0.07),
                    child: Column(
                      mainAxisAlignment: MainAxisAlignment.start,
                      children: [
-                       Image.asset('images/iconem.png',width: SizeApp.width*0.30,
-                         height: SizeApp.width*0.30,),
+                       Image.asset('images/slma.png',   width: SizeApp.width*0.30,
+                           height: SizeApp.width*0.30),
                        Text('گروه نرم افزاری آتیران',
                          style: TextStyle(color: Color(0xff575757),
                              fontSize: 16,
@@ -280,6 +286,16 @@ class _mainpageState extends State<mainpage> {
                      ],
                    ),
                  ),
+                 Positioned(
+                   right: 8,
+                   bottom: 8,
+                   child: Text('نسخه 1.0.0',
+                   style: TextStyle(
+                     fontWeight: FontWeight.bold,
+                     color: Colors.white,
+                     fontSize: 16
+                   ),),
+                 )
                ],
 
              ),

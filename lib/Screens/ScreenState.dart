@@ -32,10 +32,24 @@ class _ScreenScreenState extends State<ScreenState> {
     Baseurl=  prefs.getString("Baseurl")!;
     UserName=  prefs.getString("UserName")!;
     Password=  prefs.getString("Password")!;
-
+   Run();
   }
 
   List<ReRegion> datamian=[];
+
+  Future Run()async {
+    var ss = await ApiService.GetRegion(
+        Baseurl, UserName, Password, widget.IdCity, '');
+
+    setState(() {
+      if(ss.res.length>0)
+      {
+        datamian=ss.res;
+      }else{
+        datamian.clear();
+      }
+    });
+  }
 
   @override
   void initState() {

@@ -46,6 +46,7 @@ class Res_DetailFactor {
     required  this.etebar,
     required  this.Man,
     required  this.Takhfif,
+    required  this.Cred,
   });
 
 
@@ -57,6 +58,7 @@ class Res_DetailFactor {
   String etebar;
   String Takhfif;
   String Man;
+  String Cred;
 
 
   factory Res_DetailFactor.fromJson(Map<String, dynamic> json) => Res_DetailFactor(
@@ -68,6 +70,7 @@ class Res_DetailFactor {
     etebar: json["Etebar"],
     Takhfif: json["Takhfif"],
     Man: json["Man"],
+    Cred: json["Cred"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -78,6 +81,7 @@ class Res_DetailFactor {
     "priceChkReturn": priceChkReturn,
     "Etebar": etebar,
     "Man": Man,
+    "Cred": Cred,
     "Takhfif": Takhfif,
   };
 }
@@ -89,6 +93,9 @@ class ListKala {
     required  this.joz,
     required  this.moh,
     required  this.kol,
+    required  this.jozPrice,
+    required  this.kolPrice,
+    required  this.takhfif,
   });
 
   String naka;
@@ -96,6 +103,11 @@ class ListKala {
   String joz;
   String moh;
   String kol;
+  String jozPrice;
+  String kolPrice;
+  String takhfif;
+
+
 
   factory ListKala.fromJson(Map<String, dynamic> json) => ListKala(
     naka: json["naka"],
@@ -103,6 +115,9 @@ class ListKala {
     joz: json["joz"],
     moh: json["moh"],
     kol: json["kol"],
+    jozPrice: json["jozPrice"],
+    kolPrice: json["kolPrice"],
+    takhfif: json["takhfif"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -111,5 +126,8 @@ class ListKala {
     "joz": joz,
     "moh": moh,
     "kol": kol,
+    "jozPrice": jozPrice,
+    "kolPrice": kolPrice,
+    "takhfif": takhfif,
   };
 }

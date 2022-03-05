@@ -166,7 +166,7 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.all(8),
+                  margin: EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: BaseColor)
@@ -192,7 +192,7 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                       Container(
                         width: 2,
                         color: ColorLine,
-                        height: Sizewid*1/7,
+                        height: Sizewid*1/SizeResponsive,
                       ),
                       Expanded(child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -237,7 +237,7 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                                              var Date= await      Navigator.of(context).push(
                                                  MaterialPageRoute(
                                                      builder: (context)
-                                                     => DetailPishFactor(MyData[item].id.toString(),MyData[item])));
+                                                     => DetailPishFactor(MyData[item].id.toString(),MyData[item],true)));
                                              if(Date!=null)
                                              {
                                                MyData.removeAt(item);
@@ -272,13 +272,13 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                                                              child: BoxInfo_3('تاریخ',MyData[item].date)),
                                                          Container(
                                                            width: 2,
-                                                           height: Sizewid*1/7,
+                                                           height: Sizewid*1/SizeResponsive,
                                                            color: ColorLine,
                                                          ),
                                                          Expanded(
                                                              flex: 75,
                                                              child:
-                                                             BoxInfo_Right('نام مشتری',MyData[item].customerName)
+                                                             BoxInfo_Right_2('نام مشتری',MyData[item].customerName,MyData[item].id.toString())
                                                          )
                                                        ],
                                                      ),
@@ -294,19 +294,19 @@ class _PishFactorNotAcceptState extends State<PishFactorNotAccept> {
                                                        Expanded(child: BoxInfo_3('مبلغ',MyData[item].payment)),
                                                        Container(
                                                          width: 2,
-                                                         height: Sizewid*1/7,
+                                                         height: Sizewid*1/SizeResponsive,
                                                          color: ColorLine,
                                                        ),
-                                                       Expanded(child: BoxInfo_3('کل',MyData[item].tedJoz)),
+                                                       Expanded(child: BoxInfo_3('کل',MyData[item].tedKol)),
                                                        Container(
                                                          width: 2,
-                                                         height: Sizewid*1/7,
+                                                         height: Sizewid*1/SizeResponsive,
                                                          color: ColorLine,
                                                        ),
                                                        Expanded(child: BoxInfo_3('جز',MyData[item].tedJoz)),
                                                        Container(
                                                          width: 2,
-                                                         height: Sizewid*1/7,
+                                                         height: Sizewid*1/SizeResponsive,
                                                          color: ColorLine,
                                                        ),
                                                        Expanded(child: BoxInfo_3('واحد',MyData[item].tedVah)),
@@ -478,7 +478,7 @@ class BoxInfo_3 extends StatelessWidget {
               color: ColorFirst
           ),),
         Padding(
-          padding: const EdgeInsets.only(top: 10.0),
+          padding: const EdgeInsets.only(top: 5.0),
           child: Text(Second==null||Second.isEmpty?'نامشخص':Second,
             style: TextStyle(
                 fontSize: SizeSecond,
@@ -515,6 +515,53 @@ class BoxInfo_Right extends StatelessWidget {
                 fontSize: SizeFirst,
                 color: ColorFirst
             ),),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0,right: 4,left: 4),
+            child: Text(Second==null||Second.isEmpty?'نامشخص':Second,
+              style: TextStyle(
+                  fontSize: SizeSecond,
+                  color: ColorSecond
+              ),),
+          )
+        ],
+      ),
+    );
+  }
+}
+class BoxInfo_Right_2 extends StatelessWidget {
+
+
+  String First;
+
+  String Second;
+  String Third;
+
+
+  BoxInfo_Right_2(this.First, this.Second,this.Third);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(Third+' : شماره فاکتور',
+                style: TextStyle(
+                    fontSize: SizeFirst,
+                    color: ColorFirst
+                ),),
+              Text(First,
+                style: TextStyle(
+                    fontSize: SizeFirst,
+                    color: ColorFirst
+                ),),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0,right: 4,left: 4),
             child: Text(Second==null||Second.isEmpty?'نامشخص':Second,

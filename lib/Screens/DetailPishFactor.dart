@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,7 +19,8 @@ class DetailPishFactor extends StatefulWidget {
   String NumberFactor;
 
   Re_NotAccept MyData;
-  DetailPishFactor(this.NumberFactor,this.MyData);
+  bool IsVis;
+  DetailPishFactor(this.NumberFactor,this.MyData,this.IsVis);
 
   @override
   State<DetailPishFactor> createState() => _DetailPishFactorState();
@@ -35,6 +36,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
   String Etebar='';
   String Man='';
   String Takhfif='';
+  String Cred='';
 
   List<ListKala> MyData=[];
 
@@ -119,6 +121,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
         Etebar=Data.res.etebar;
         Man=Data.res.Man;
         Takhfif=Data.res.Takhfif;
+        Cred=Data.res.Cred;
         setState(() {
 
         });
@@ -153,9 +156,9 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
         centerTitle: true,
         title: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(widget.NumberFactor+' : شماره پیش فاکتور  ',style: TextStyle(
+          child: Text('  تاریخ '+' : '+widget.MyData.date +'    '+' شماره پیش فاکتور  '+' : '+widget.NumberFactor,style: TextStyle(
               color: Colors.white,
-              fontSize: 12,
+              fontSize: 10,
               fontWeight: FontWeight.bold
           ),),
         ),
@@ -197,10 +200,10 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                           children: [
                             Expanded(
                                 flex: 25,
-                                child: BoxInfo_3('تاریخ',widget.MyData.date)),
+                                child: BoxInfo_3('تخفیف',Takhfif)),
                             Container(
                               width: 2,
-                              height: Sizewid*1/7,
+                              height: Sizewid*1/SizeResponsive,
                               color: ColorLine,
                             ),
                             Expanded(
@@ -222,19 +225,19 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                           Expanded(child: BoxInfo_3('مبلغ',widget.MyData.payment)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/7,
+                            height: Sizewid*1/SizeResponsive,
                             color: ColorLine,
                           ),
                           Expanded(child: BoxInfo_3('کل',widget.MyData.tedJoz)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/7,
+                            height: Sizewid*1/SizeResponsive,
                             color: ColorLine,
                           ),
                           Expanded(child: BoxInfo_3('جز',widget.MyData.tedJoz)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/7,
+                            height: Sizewid*1/SizeResponsive,
                             color: ColorLine,
                           ),
                           Expanded(child: BoxInfo_3('واحد',widget.MyData.tedVah)),
@@ -270,7 +273,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               child: BoxInfo_3('مبلغ',priceChkInWay)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/7,
+                            height: Sizewid*1/SizeResponsive,
                             color: ColorLine,
                           ),
                           Expanded(
@@ -278,7 +281,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               child: BoxInfo_3('تعداد',countChkInWay)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/7,
+                            height: Sizewid*1/SizeResponsive,
                             color: ColorLine,
                           ),
                           Expanded(
@@ -309,7 +312,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               child: BoxInfo_3('مبلغ',priceChkReturn)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/7,
+                            height: Sizewid*1/SizeResponsive,
                             color: ColorLine,
                           ),
                           Expanded(
@@ -317,7 +320,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               child: BoxInfo_3('تعداد',countChkReturn)),
                           Container(
                             width: 2,
-                            height: Sizewid*1/7,
+                            height: Sizewid*1/SizeResponsive,
                             color: ColorLine,
                           ),
                           Expanded(
@@ -372,7 +375,40 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                     ),
                     Container(
                       width: 2,
-                      height: Sizewid*1/7,
+                      height: Sizewid*1/SizeResponsive,
+                      color: ColorLine,
+                    ),
+                    Expanded(
+                      child:  Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            Text('اعتبار',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: ColorSecond,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+
+                              ),),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
+                              child: Text(Cred,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: ColorSecond,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+
+                                ),),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 2,
+                      height: Sizewid*1/SizeResponsive,
                       color: ColorLine,
                     ),
                     Expanded(
@@ -391,39 +427,6 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
                               child: Text(Man,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: ColorSecond,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-
-                                ),),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 2,
-                      height: Sizewid*1/7,
-                      color: ColorLine,
-                    ),
-                    Expanded(
-                      child:  Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            Text('تخفیف',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: ColorSecond,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-
-                              ),),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 4),
-                              child: Text(Takhfif,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: ColorSecond,
@@ -486,7 +489,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                                     child: BoxInfo_3('محتوایی',MyData[item].moh)),
                                 Container(
                                   width: 2,
-                                  height: Sizewid*1/7,
+                                  height: Sizewid*1/SizeResponsive,
                                   color: ColorLine,
                                 ),
                                 Expanded(
@@ -508,13 +511,13 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                               Expanded(child: BoxInfo_3('کل',MyData[item].kol)),
                               Container(
                                 width: 2,
-                                height: Sizewid*1/7,
+                                height: Sizewid*1/SizeResponsive,
                                 color: ColorLine,
                               ),
                               Expanded(child: BoxInfo_3('جز',MyData[item].joz)),
                               Container(
                                 width: 2,
-                                height: Sizewid*1/7,
+                                height: Sizewid*1/SizeResponsive,
                                 color: ColorLine,
                               ),
                               Expanded(child: BoxInfo_3('واحد',MyData[item].vah)),
@@ -529,19 +532,19 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                           ),
                           Row(
                             children: [
-                              Expanded(child: BoxInfo_3('بهای کل',MyData[item].kol)),
+                              Expanded(child: BoxInfo_3('بهای کل',MyData[item].kolPrice)),
                               Container(
                                 width: 2,
-                                height: Sizewid*1/7,
+                                height: Sizewid*1/SizeResponsive,
                                 color: ColorLine,
                               ),
-                              Expanded(child: BoxInfo_3('بهای جز',MyData[item].joz)),
+                              Expanded(child: BoxInfo_3('تخفیف',MyData[item].takhfif)),
                               Container(
                                 width: 2,
-                                height: Sizewid*1/7,
+                                height: Sizewid*1/SizeResponsive,
                                 color: ColorLine,
                               ),
-                              Expanded(child: BoxInfo_3('تخفیف',MyData[item].vah)),
+                              Expanded(child: BoxInfo_3('بهای جز',MyData[item].jozPrice)),
 
                             ],
                           )
@@ -553,6 +556,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
               ),
               Flag_Desc?
               BoxInput_Desc('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1):Container(),
+              widget.IsVis==true?
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
@@ -611,7 +615,7 @@ class _DetailPishFactorState extends State<DetailPishFactor> {
                     ),
                   ],
                 ),
-              ),
+              ) :Container()
               // Row(
               //   children: [
               //     Expanded(
