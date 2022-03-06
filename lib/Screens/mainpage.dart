@@ -1,6 +1,5 @@
-
+// @dart=2.9
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -10,7 +9,6 @@ import 'package:sailmanager/ScreensArts/Art1.dart';
 import 'package:sailmanager/teeeee.dart';
 import 'package:sailmanager/tetstst.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../ScreensArts/Art2.dart';
 
 

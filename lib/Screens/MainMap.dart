@@ -573,7 +573,7 @@ class _MainMapState extends State<MainMap> {
       lng: 0, lat: 0, tell1: '', tell2: '', datetime: '',
       visRdf: -9, name: '', cell: '',);
     polylinePoints=PolylinePoints();
-    // GetAll();
+    GetAll();
 
 
 
