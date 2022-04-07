@@ -1,4 +1,4 @@
-// @dart=2.9
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,8 +15,6 @@ import '../ScreensArts/Art2.dart';
 import '../Constants.dart';
 import 'MainMap.dart';
 class mainpage extends StatefulWidget {
-  const mainpage({Key? key}) : super(key: key);
-
   @override
   State<mainpage> createState() => _mainpageState();
 }

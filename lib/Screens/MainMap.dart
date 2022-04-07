@@ -466,7 +466,7 @@ class _MainMapState extends State<MainMap> {
   }
   late Timer _timer;
   updateMarkers() {
-    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 15), (timer) {
       if(TypeSwitch_Now)
       {
         GetAll();
@@ -485,6 +485,7 @@ class _MainMapState extends State<MainMap> {
 
 
 
+
       markerbitmap2 = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration(),
         "images/niman.png",
@@ -496,7 +497,7 @@ class _MainMapState extends State<MainMap> {
     var Password =prefs.getString('Password');
     var data=    await   ApiService.GetPerson( base.toString(), UserName!, Password!);
 
-    if(data.code==200)
+     if(data.code==200)
       {
         if(data.res.length>0)
           {

@@ -4,12 +4,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sailmanager/Screens/mainpage.dart';
 
 import 'Screens/MainMap.dart';
-
-
 void main() {
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   final camerainit=CameraPosition(target: LatLng(31.351838, 48.673007));
