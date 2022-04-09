@@ -142,7 +142,7 @@ class _PersonelsState extends State<Personels> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.Customer_temps2.length.toString());
+
     return Scaffold(
       backgroundColor: Color(0xffF1F7FE),
       body: Padding(
@@ -189,7 +189,7 @@ class _PersonelsState extends State<Personels> {
                             itemBuilder: (ctx,item){
                               return   InkWell(
                                 onTap: () async{
-                                  print(widget.TypeSwitch_Now.toString());
+
                                   if(widget.TypeSwitch_Now)
                                   {
                                     if( widget.Customer_temps2[item].lat>0)
@@ -199,7 +199,7 @@ class _PersonelsState extends State<Personels> {
                                       ApiService.ShowSnackbar('پرسنل مورد نظر موقعیت مکانی ندارد');
                                     }
                                   }else{
-                                    print('QQQa');
+
                                     // var data= await ApiService.OfflinePeson(pr, Baseurl, UserName, Password,
                                     //     widget.Customer_temps2[item].visRdf.toString(),creationDateStart,
                                     //     creationDateEnd,creationDateStart_En,creationDateEnd_En);
@@ -211,13 +211,12 @@ class _PersonelsState extends State<Personels> {
                                       {
                                         if(datatransfe.length>0)
                                           {
-                                            print('12');
-                                            print(widget.Customer_temps2[item].name);
+
                                             pr.hide();
                                             datatransfe[0].name= widget.Customer_temps2[item].name;
                                             Navigator.pop(context,datatransfe);
                                           }else{
-                                          print('14');
+
                                           pr.hide();
                                           ApiService.ShowSnackbar('پرسنل مورد نظر موقعیت مکانی ندارد');
                                         }

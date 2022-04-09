@@ -92,7 +92,8 @@ class ApiService{
         print('eRROR IS'+error.toString());
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
-      }) ;
+      });
+
 
       print('Resi'+response.toString());
       if(response.statusCode==200)
@@ -142,6 +143,7 @@ class ApiService{
 
 
 
+
     // String Base= await  Getbaseurl();
 
     // final url = Uri.parse(Base+'/Sales');
@@ -174,7 +176,7 @@ class ApiService{
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Online/List');
-    print(map.toString());
+
     try{
       Response response = await http.post(url,  body:map,
       ).timeout(
@@ -185,19 +187,18 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print('eRROR IS'+error.toString());
+
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
       }) ;
 
-      print('Resi'+response.toString());
+
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
         var DATA=onlineModelFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         if(DATA.res==true)
         {
 
@@ -209,21 +210,21 @@ class ApiService{
       }else{
 
         pr.hide();
-        print(response.statusCode.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
 
       }
     } on SocketException catch (e)
     {
-      print('I am Here'+e.toString());
+
       pr.hide();
       login= null;
     }
     on TimeoutException catch (e) {
-      print('Error issssssssswwwwww: $e');
+
 
     } on Error catch (e) {
-      print('Error isssssssss: $e');
+
     }
 
     pr.hide();
@@ -279,7 +280,7 @@ class ApiService{
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Ofline/List');
-    print(map.toString());
+
     try{
       Response response = await http.post(url,  body:map,
       ).timeout(
@@ -290,17 +291,17 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print('eRROR IS'+error.toString());
+
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
       }) ;
 
-      print('Resi'+response.toString());
+
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
-        print(data);
+
         var DATA=offlineModelFromJson(data);
 
 
@@ -322,21 +323,21 @@ class ApiService{
       }else{
 
         pr.hide();
-        print(response.statusCode.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
 
       }
     } on SocketException catch (e)
     {
-      print('I am Here'+e.toString());
+
       pr.hide();
       login= null;
     }
     on TimeoutException catch (e) {
-      print('Error issssssssswwwwww: $e');
+
 
     } on Error catch (e) {
-      print('Error isssssssss: $e');
+
     }
 
 
@@ -394,7 +395,7 @@ class ApiService{
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Ofline/List');
-    print(map.toString());
+
     try{
       Response response = await http.post(url,  body:map,
       ).timeout(
@@ -405,20 +406,19 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print('eRROR IS'+error.toString());
+
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
       }) ;
 
-      print('Resi'+response.toString());
+
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
-        print(data);
+
         var DATA=offlineModelFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         if(DATA.res==true)
         {
 
@@ -430,21 +430,21 @@ class ApiService{
       }else{
 
         pr.hide();
-        print(response.statusCode.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
 
       }
     } on SocketException catch (e)
     {
-      print('I am Here'+e.toString());
+
       pr.hide();
       login= null;
     }
     on TimeoutException catch (e) {
-      print('Error issssssssswwwwww: $e');
+
 
     } on Error catch (e) {
-      print('Error isssssssss: $e');
+
     }
 
     pr.hide();
@@ -488,7 +488,7 @@ class ApiService{
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
       final url = Uri.parse(Baseurl+'/'+'Api/Atiran/CustGroup/List');
-    print(map.toString());
+
     try{
       Response response = await http.post(url,  body:map,
       ).timeout(
@@ -499,19 +499,18 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print('eRROR IS'+error.toString());
+
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
       }) ;
 
-      print('Resi'+response.toString());
+
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
         var DATA=custGroupFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         if(DATA.res==true)
         {
 
@@ -523,21 +522,21 @@ class ApiService{
       }else{
 
         pr.hide();
-        print(response.statusCode.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
 
       }
     } on SocketException catch (e)
     {
-      print('I am Here'+e.toString());
+
       pr.hide();
       login= null;
     }
     on TimeoutException catch (e) {
-      print('Error issssssssswwwwww: $e');
+
 
     } on Error catch (e) {
-      print('Error isssssssss: $e');
+
     }
 
     pr.hide();
@@ -580,7 +579,7 @@ class ApiService{
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.127:33224/manager'+'/'+'Api/Atiran/Provice/List');
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Provice/List');
-    print(map.toString());
+
     try{
       Response response = await http.post(url,  body:map,
       ).timeout(
@@ -591,19 +590,18 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print('eRROR IS'+error.toString());
+
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
       }) ;
 
-      print('Resi'+response.toString());
+
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
         var DATA=modelProviceFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         if(DATA.res==true)
         {
 
@@ -615,21 +613,21 @@ class ApiService{
       }else{
 
         pr.hide();
-        print(response.statusCode.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
 
       }
     } on SocketException catch (e)
     {
-      print('I am Here'+e.toString());
+
       pr.hide();
       login= null;
     }
     on TimeoutException catch (e) {
-      print('Error issssssssswwwwww: $e');
+
 
     } on Error catch (e) {
-      print('Error isssssssss: $e');
+
     }
 
     pr.hide();
@@ -677,7 +675,7 @@ class ApiService{
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/City/List');
-    print(map.toString());
+
     try{
       Response response = await http.post(url,  body:map,
       ).timeout(
@@ -688,22 +686,21 @@ class ApiService{
         },
       ).catchError((error) {
 
-        print('eRROR IS'+error.toString());
+
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
       }) ;
 
-      print('Resi'+response.body.toString());
+
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
         var DATA=modelCityFromJson(data);
         // var DATA=modelCityFromJson(data);
         // var DATA = json.decode(response.body);
         // var DATA=ModelCity.fromJson();
-        print(DATA.toString());
-        print(response.body.toString());
+
         if(DATA.res==true)
         {
           login= DATA;
@@ -712,20 +709,20 @@ class ApiService{
         }
       }else{
 
-        print(response.statusCode.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       }
     } on SocketException catch (e)
     {
-      print('I am Here'+e.toString());
+
 
       login= null;
     }
     on TimeoutException catch (e) {
-      print('Error issssssssswwwwww: $e');
+
 
     } on Error catch (e) {
-      print('Error isssssssss: $e');
+
     }
 
 
@@ -773,7 +770,7 @@ class ApiService{
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Masir/List');
-    print(map.toString());
+
     try{
       Response response = await http.post(url,  body:map,
       ).timeout(
@@ -784,22 +781,21 @@ class ApiService{
         },
       ).catchError((error) {
 
-        print('eRROR IS'+error.toString());
+
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
       }) ;
 
-      print('Resi'+response.body.toString());
+
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
         var DATA=modelWayFromJson(data);
         // var DATA=modelCityFromJson(data);
         // var DATA = json.decode(response.body);
         // var DATA=ModelCity.fromJson();
-        print(DATA.toString());
-        print(response.body.toString());
+
         if(DATA.res==true)
         {
           login= DATA;
@@ -808,20 +804,20 @@ class ApiService{
         }
       }else{
 
-        print(response.statusCode.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       }
     } on SocketException catch (e)
     {
-      print('I am Here'+e.toString());
+
 
       login= null;
     }
     on TimeoutException catch (e) {
-      print('Error issssssssswwwwww: $e');
+
 
     } on Error catch (e) {
-      print('Error isssssssss: $e');
+
     }
 
 
@@ -869,7 +865,7 @@ class ApiService{
     // print(url.toString());
     // final url = Uri.parse('http://91.108.148.38:33221/CRM'+'/'+'Api/Atiran/login/login');
     final url = Uri.parse(Baseurl+'/'+'Api/Atiran/Region/List');
-    print(map.toString());
+
     try{
       Response response = await http.post(url,  body:map,
       ).timeout(
@@ -880,22 +876,21 @@ class ApiService{
         },
       ).catchError((error) {
 
-        print('eRROR IS'+error.toString());
+
         // return   ShowSnackbar(error.toString());
         // throw("some arbitrary error");
       }) ;
 
-      print('Resi'+response.body.toString());
+
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
         var DATA=modelRegionFromJson(data);
         // var DATA=modelCityFromJson(data);
         // var DATA = json.decode(response.body);
         // var DATA=ModelCity.fromJson();
-        print(DATA.toString());
-        print(response.body.toString());
+
         if(DATA.res==true)
         {
           login= DATA;
@@ -904,20 +899,20 @@ class ApiService{
         }
       }else{
 
-        print(response.statusCode.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       }
     } on SocketException catch (e)
     {
-      print('I am Here'+e.toString());
+
 
       login= null;
     }
     on TimeoutException catch (e) {
-      print('Error issssssssswwwwww: $e');
+
 
     } on Error catch (e) {
-      print('Error isssssssss: $e');
+
     }
 
 
@@ -965,7 +960,7 @@ class ApiService{
 
 
 
-    print('sgfsfgsdfgfdsg'+map.toString());
+
 
     try{
       Response response = await post(url,  body:map
@@ -977,18 +972,17 @@ class ApiService{
         },
       ).catchError((error) {
 
-        print(error.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
         throw("some arbitrary error");
       });;
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
-        print(data);
+
         var DATA=listCustomerFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         // ignore: unnecessary_null_comparison
 
         if(DATA.res!=null)
@@ -1006,7 +1000,7 @@ class ApiService{
 
     catch (e)
     {
-      print('Eeror is Herer'+e.toString());
+
       ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       login= null;
 
@@ -1048,7 +1042,7 @@ class ApiService{
 
 
 
-    print('sgfsfgsdfgfdsg'+map.toString());
+
 
     try{
       Response response = await post(url,  body:map
@@ -1057,18 +1051,17 @@ class ApiService{
 
       ).catchError((error) {
         // pr.hide();
-        print(error.toString());
+
 
         throw("some arbitrary error");
       });;
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
-        print(data);
+
         var DATA=listPersonelFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         // ignore: unnecessary_null_comparison
 
         if(DATA.res!=null)
@@ -1084,7 +1077,7 @@ class ApiService{
       }
     }catch (e)
     {
-      print('Eeror is Herer'+e.toString());
+
 
       login= null;
       // pr.hide();
@@ -1122,7 +1115,7 @@ class ApiService{
     map['custId'] =custId ;
 
 
-    print('sgfsfgsdfgfdsg'+map.toString());
+
 
     try{
       Response response = await post(url,  body:map
@@ -1134,18 +1127,17 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print(error.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
         throw("some arbitrary error");
       });;
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
-        print(data);
+
         var DATA=pishCustomerFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         // ignore: unnecessary_null_comparison
 
         if(DATA.res!=null)
@@ -1161,7 +1153,7 @@ class ApiService{
       }
     }catch (e)
     {
-      print('Eeror is Herer'+e.toString());
+
       ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       login= null;
       pr.hide();
@@ -1198,7 +1190,7 @@ class ApiService{
     map['shFacfo'] =shFacfo ;
 
 
-    print('sgfsfgsdfgfdsg'+map.toString());
+
 
     try{
       Response response = await post(url,  body:map
@@ -1210,18 +1202,17 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print(error.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
         throw("some arbitrary error");
       });;
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
-        print(data);
+
         var DATA=modelDetailFactorFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         // ignore: unnecessary_null_comparison
 
         if(DATA.res!=null)
@@ -1237,7 +1228,7 @@ class ApiService{
       }
     }catch (e)
     {
-      print('Eeror is Herer'+e.toString());
+
       ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       login= null;
       pr.hide();
@@ -1279,7 +1270,7 @@ class ApiService{
 
 
 
-    print('sgfsfgsdfgfdsg'+map.toString());
+
 
     try{
       Response response = await post(url,  body:map
@@ -1291,18 +1282,17 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print(error.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
         throw("some arbitrary error");
       });;
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
-        print(data);
+
         var DATA=modelConfirmFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         // ignore: unnecessary_null_comparison
 
         if(DATA.res!=null)
@@ -1318,7 +1308,7 @@ class ApiService{
       }
     }catch (e)
     {
-      print('Eeror is Herer'+e.toString());
+
       ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       login= null;
       pr.hide();
@@ -1361,7 +1351,7 @@ class ApiService{
 
 
 
-    print('sgfsfgsdfgfdsg'+map.toString());
+
 
     try{
       Response response = await post(url,  body:map
@@ -1373,18 +1363,17 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print(error.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
         throw("some arbitrary error");
       });;
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
-        print(data);
+
         var DATA=modelFactorsAllFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         // ignore: unnecessary_null_comparison
 
         if(DATA.res!=null)
@@ -1400,7 +1389,7 @@ class ApiService{
       }
     }catch (e)
     {
-      print('Eeror is Herer'+e.toString());
+
       ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       login= null;
       pr.hide();
@@ -1442,7 +1431,7 @@ class ApiService{
 
 
 
-    print('sgfsfgsdfgfdsg'+map.toString());
+
 
     try{
       Response response = await post(url,  body:map
@@ -1454,18 +1443,17 @@ class ApiService{
         },
       ).catchError((error) {
         pr.hide();
-        print(error.toString());
+
         return   ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
         throw("some arbitrary error");
       });;
       if(response.statusCode==200)
       {
-        print('Its Ok Request Nima');
+
         String data=response.body;
-        print(data);
+
         var DATA=modelPIshfactorsNotAcceptFromJson(data);
-        print(DATA.toString());
-        print(response.body.toString());
+
         // ignore: unnecessary_null_comparison
 
         if(DATA.res!=null)
@@ -1481,7 +1469,7 @@ class ApiService{
       }
     }catch (e)
     {
-      print('Eeror is Herer'+e.toString());
+
       ShowSnackbar('مشکلی در ارتباط با سرور به وجود آمده است');
       login= null;
       pr.hide();

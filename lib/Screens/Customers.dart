@@ -694,9 +694,14 @@ class _CustomersState extends State<Customers> {
                   children: [
                     Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(Icons.arrow_back,color: BaseColor,),
+                        InkWell(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.arrow_back,color: BaseColor,),
+                          ),
                         ),
                         Expanded(
                           child: Card(
@@ -762,7 +767,7 @@ class _CustomersState extends State<Customers> {
 
                           return  BoxInfo78(Sizewid,MyDataSourch[Item].name.trim(),'',MyDataSourch[Item].tell1,MyDataSourch[Item].tell2,
                               MyDataSourch[Item].address.trim(),(){
-                                print('dlvl,dvl,,ldlv,');
+
                                 Navigator.of(context).push(
                                     MaterialPageRoute(builder: (context) => PishFactorsCustomer(MyDataSourch[Item].id) ));
                               },(){
@@ -972,7 +977,7 @@ class BoxInfo78 extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      print('Not CAnt');
+
     }
   }
   @override
@@ -1122,7 +1127,7 @@ class BoxInfo78 extends StatelessWidget {
                           onTap: (){
                             if(Tel2.isNotEmpty)
                             {
-                              print('89');
+
                               _launchCaller3(Tel1);
                             }
                           },
@@ -1160,7 +1165,7 @@ class BoxInfo78 extends StatelessWidget {
                           onTap: (){
                             if(Tel1.isNotEmpty)
                             {
-                              print('89');
+
                               _launchCaller3(Tel1);
                             }
                           },

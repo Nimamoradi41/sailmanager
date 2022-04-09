@@ -539,10 +539,10 @@ class _MainMapState extends State<MainMap> {
     if(TypeSwitch_Now)
       {
 
-        print('Data iS herre');
+
         if(myperson.visRdf!=-9)
         {
-          print('Data iS herre2');
+
           myperson_Markre=Marker(
               markerId:MarkerId('MarkId'+myperson.lat.toString()+myperson.lng.toString()),
               icon: markerbitmap2,
@@ -674,17 +674,17 @@ class _MainMapState extends State<MainMap> {
                                 MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
                             if(TypeSwitch_Now)
                               {
-                                print('TypeSwitch_Now'+ 'Is True');
+
                                 if(resuilt!=null)
                                 {
-                                  print('2302020202020200');
+
                                   if(myperson.visRdf!=-9)
                                     {
                                       _Markers.remove(myperson_Markre);
                                     }
                                   // _Markers.clear();
                                   myperson=resuilt;
-                                  print(myperson.lat.toString());
+
                                   _poly.clear();
                                   _cordinate.clear();
 
@@ -712,12 +712,10 @@ class _MainMapState extends State<MainMap> {
 
                                 }
                               }else{
-                              print('TypeSwitch_Now'+ 'Is False');
-                               print('HI');
+
                                if(resuilt!=null)
                                {
-                                 print('565656565655');
-                                 print(resuilt.toString());
+
                                  _Markers.clear();
                                  _poly.clear();
                                  _cordinate.clear();
@@ -734,8 +732,7 @@ class _MainMapState extends State<MainMap> {
                                            target: LatLng(d[0].lat,d[0].lng),
                                            zoom: 16);
                                        d.forEach((element) {
-                                         print(element.toString());
-                                         print('element.toString()');
+
                                          _cordinate.add(LatLng(element.lat,element.lng));
                                        });
                                        var uuid = Uuid();

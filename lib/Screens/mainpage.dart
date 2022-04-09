@@ -37,7 +37,7 @@ class _mainpageState extends State<mainpage> {
       }
 
 
-    print(txt_1.text);
+
     if(!txt_1.text.startsWith('https://')&&!txt_1.text.startsWith('http://'))
     {
       ApiService.ShowSnackbar('آدرس سرور اشتباه وارد شده است');

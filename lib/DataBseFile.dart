@@ -60,7 +60,7 @@ class DataBseFile {
       s.masirId,
       s.reginId
     ]);
-    print(res.toString());
+
     return res;
   }
 
@@ -153,7 +153,7 @@ class DataBseFile {
     List<Re_Customer> Customers = <Re_Customer>[];
     final db = await database;
     var res = await db!.query("Customer");
-    print(res.length.toString());
+
     res.forEach((result) {
       var dd = result;
       var visRdf = 0;
@@ -196,7 +196,7 @@ class DataBseFile {
     List<ReCustGroup_2> Customers = <ReCustGroup_2>[];
     final db = await database;
     var res = await db!.query("CustProup");
-    print(res.length.toString());
+
     res.forEach((result) {
       var dd = result;
       var visRdf = 0;
@@ -223,7 +223,7 @@ class DataBseFile {
     List<Re_Provice> Customers = <Re_Provice>[];
     final db = await database;
     var res = await db!.query("Province");
-    print(res.length.toString());
+
     res.forEach((result) {
       var dd = result;
       var visRdf = 0;
@@ -251,7 +251,7 @@ class DataBseFile {
     List<ReC_City> Customers = <ReC_City>[];
     final db = await database;
     var res = await db!.query("City");
-    print(res.length.toString());
+
     res.forEach((result) {
       var dd = result;
       var visRdf = 0;
@@ -279,10 +279,11 @@ class DataBseFile {
 
   Future Insert_Allof_Customer(List<Re_Customer> model, bool Flag) async
   {
-    print('model '+model.length.toString());
+
+
     final db = await database;
     if (Flag) {
-      print('is Trureeeee');
+
       await db!.delete(Customer_tbl);
     }
 
@@ -299,7 +300,7 @@ class DataBseFile {
 
     var dd = await Future.wait(model.map((e) async {
       var ress = await newCustomer(e);
-      print('Id is ' + ress.toString());
+
       return ress.toString();
     }));
 
@@ -342,13 +343,12 @@ class DataBseFile {
   {
     final db = await database;
 
-    print('is Trureeeee');
     await db!.delete(Personel_tbl);
 
     var dd = await Future.wait(model.map((e) async {
       var ress = await db.insert(Personel_tbl, e.toJson(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
-      print('Id is ' + ress.toString());
+
       return ress.toString();
     }));
 
@@ -389,13 +389,13 @@ class DataBseFile {
   {
     final db = await database;
 
-    print('is Trureeeee');
+
     await db!.delete(CustProup_tbl);
 
     var dd = await Future.wait(model.map((e) async {
       var ress = await db.insert(CustProup_tbl, e.toJson(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
-      print('Id is ' + ress.toString());
+
       return ress.toString();
     }));
 
@@ -436,13 +436,13 @@ class DataBseFile {
   {
     final db = await database;
 
-    print('is Trureeeee');
+
     await db!.delete(Province_tbl);
 
     var dd = await Future.wait(model.map((e) async {
       var ress = await db.insert(Province_tbl, e.toJson(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
-      print('Id is ' + ress.toString());
+
       return ress.toString();
     }));
 
@@ -483,7 +483,7 @@ class DataBseFile {
   {
     final db = await database;
     if (Flag) {
-      print('is Trureeeee');
+
       await db!.delete(City_tbl);
     }
 
@@ -492,7 +492,7 @@ class DataBseFile {
         await Future.wait(model.map((e) async {
       var ress = await db!.insert(
           City_tbl, e.toJson(), conflictAlgorithm: ConflictAlgorithm.ignore);
-      print('Id is ' + ress.toString());
+
       return ress.toString();
     }));
   }
@@ -520,7 +520,7 @@ class DataBseFile {
     var base = prefs.getString('Baseurl');
     var UserName = prefs.getString('UserName');
     var Password = prefs.getString('Password');
-    print('PageCounterCustomer' + PageCounterCustomer.toString());
+
     // var Data = await ApiService.GetCustomer(
     //     pro,
     //     base!,
@@ -693,7 +693,7 @@ class DataBseFile {
     var base = prefs.getString('Baseurl');
     var UserName = prefs.getString('UserName');
     var Password = prefs.getString('Password');
-    print('PageCounterCustomer' + PageCounterCity.toString());
+
     // var Data = await ApiService.GetCity(
     //     pro,
     //     base!,

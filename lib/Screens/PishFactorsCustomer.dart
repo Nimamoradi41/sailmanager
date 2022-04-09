@@ -239,7 +239,7 @@ class _PishFactorsCustomerState extends State<PishFactorsCustomer> {
   @override
   void initState() {
     super.initState();
-    print(widget.Id.toString());
+
     GetDataNow();
     GetDataRef();
   }
