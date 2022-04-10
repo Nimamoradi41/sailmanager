@@ -200,7 +200,7 @@ class _MainMapState extends State<MainMap> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('نسخه 1.0.0',style: TextStyle(
+                  Text('نسخه 1.0.1',style: TextStyle(
                     color: BaseColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 12
@@ -604,6 +604,7 @@ class _MainMapState extends State<MainMap> {
   int CountLoc=0;
   @override
   Widget build(BuildContext context) {
+    var Sizewid=MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -651,28 +652,36 @@ class _MainMapState extends State<MainMap> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+
                 CountLoc!=0?
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(' نقطه دریافت شد ',
-                        textAlign: TextAlign.end,
-                        style: TextStyle(color:
-                        BaseColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),),
-                      Text(CountLoc.toString(),
-                        textAlign: TextAlign.end,
-                        style: TextStyle(color:
-                        BaseColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),),
-                    ],
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  width: Sizewid>796?Sizewid/4:Sizewid<=450?Sizewid/2:Sizewid/2,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8)
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(' مختصات دریافت شد ',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color:
+                          BaseColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),),
+                        Text(CountLoc.toString(),
+                          textAlign: TextAlign.end,
+                          style: TextStyle(color:
+                          BaseColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold),),
+                      ],
+                    ),
                   ),
                 ):Container(),
-
                 Row(
                   children: [
                     GestureDetector(
@@ -798,7 +807,7 @@ class _MainMapState extends State<MainMap> {
 
                                             int counterr=0;
                                             d.forEach((element) async {
-                                               counterr=counterr+1;
+
                                               markerbitmap = await  BitmapDescriptor.fromAssetImage(
                                                 ImageConfiguration(),
                                                 'images/loc44.png',
