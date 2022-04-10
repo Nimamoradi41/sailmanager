@@ -17,6 +17,7 @@ class Personels extends StatefulWidget {
   List<RePerson> Customer_temps2 = <RePerson>[];
 
 
+
   Personels(this.TypeSwitch_Now,this.Customer_temps2);
 
   bool TypeSwitch_Now ;
@@ -35,7 +36,7 @@ class _PersonelsState extends State<Personels> {
   var Baseurl='';
   var UserName='';
   var Password='';
-
+  List<RePerson> Customer_temps3 = <RePerson>[];
   Future GetDataPersonel()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Baseurl=  prefs.getString("Baseurl")!;
@@ -50,7 +51,7 @@ class _PersonelsState extends State<Personels> {
     GetDataNow();
     pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
     GetDataPersonel();
-
+    Customer_temps3=widget.Customer_temps2;
   }
 
 
@@ -153,7 +154,70 @@ class _PersonelsState extends State<Personels> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                widget.Customer_temps2.length==0?
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        Navigator.pop(context);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.arrow_back,color: BaseColor,),
+                      ),
+                    ),
+                    Expanded(
+                      child: Card(
+                        margin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                        child: TextField(
+                          textAlign: TextAlign.end,
+                          onChanged: (val) async{
+                            if(val.isNotEmpty)
+                            {
+                              print(Customer.length.toString());
+                              // val=val.replaceAll('ی','ي');
+                              // val=val.replaceAll('ک','ك');
+                              Customer_temps3 =widget.Customer_temps2.where((i) => i.name.contains(val)||i.tell2.contains(val.toString())
+                                  ||i.tell1.contains(val)).toList();
+
+                              // Customer_temps2.sort((a, b) => a.name.compareTo(b.name));
+
+                              // Customer_temps2.sort((a,b){})
+
+                              // Customer_temps2.sort((a, b) {
+                              //   return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+                              // });
+                              setState(() {
+                                if(Customer_temps3.length==0)
+                                {
+                                  Customer_temps3.clear();
+                                }
+                              });
+
+
+
+
+                            }else{
+                              // print(Customer.length.toString());
+                              setState(() {
+                                Customer_temps3=widget.Customer_temps2;
+                              });
+
+                            }
+                          },
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(8),
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                  color: Color(0xff1F3C84).withOpacity(0.80)
+                              ),
+                              hintText: 'پرسنل خود را جستجو کنید...'
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Customer_temps3.length==0?
                 Expanded(
                   child: Center(
                     child: Column(
@@ -185,16 +249,16 @@ class _PersonelsState extends State<Personels> {
                             physics: NeverScrollableScrollPhysics(),
                             // itemCount: Customer_temps2.take(30).length,
                             itemCount:
-                            widget.Customer_temps2.length,
+                            Customer_temps3.length,
                             itemBuilder: (ctx,item){
                               return   InkWell(
                                 onTap: () async{
 
                                   if(widget.TypeSwitch_Now)
                                   {
-                                    if( widget.Customer_temps2[item].lat>0)
+                                    if( Customer_temps3[item].lat>0)
                                       {
-                                        Navigator.pop(context, widget.Customer_temps2[item]);
+                                        Navigator.pop(context, Customer_temps3[item]);
                                       }else{
                                       ApiService.ShowSnackbar('پرسنل مورد نظر موقعیت مکانی ندارد');
                                     }
@@ -204,7 +268,7 @@ class _PersonelsState extends State<Personels> {
                                     //     widget.Customer_temps2[item].visRdf.toString(),creationDateStart,
                                     //     creationDateEnd,creationDateStart_En,creationDateEnd_En);
                                     datatransfe.clear();
-                                      await Run77(pr, Baseurl, UserName, Password, widget.Customer_temps2[item].visRdf.toString()
+                                      await Run77(pr, Baseurl, UserName, Password, Customer_temps3[item].visRdf.toString()
                                         , creationDateStart, creationDateEnd, creationDateStart_En, creationDateEnd_En, pageCounter1.toString());
                                     // List<Latlng> data=data3;
                                     if(datatransfe!=null)
@@ -213,7 +277,7 @@ class _PersonelsState extends State<Personels> {
                                           {
 
                                             pr.hide();
-                                            datatransfe[0].name= widget.Customer_temps2[item].name;
+                                            datatransfe[0].name= Customer_temps3[item].name;
                                             Navigator.pop(context,datatransfe);
                                           }else{
 
@@ -225,7 +289,6 @@ class _PersonelsState extends State<Personels> {
 
                                     }
                                   }
-
                                 },
                                 child: Container(
                                   width: double.infinity,
@@ -249,9 +312,9 @@ class _PersonelsState extends State<Personels> {
                                       children: [
                                         Text(
                                           'نام پرسنل:  '+
-                                              widget.Customer_temps2[item].name.toString()==null?'نامشخص':
+                                              Customer_temps3[item].name.toString()==null?'نامشخص':
                                           'نام پرسنل:  '+
-                                              widget.Customer_temps2[item].name.toString(),
+                                              Customer_temps3[item].name.toString(),
                                           style: TextStyle(color: BaseColor,
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold),),
@@ -263,18 +326,17 @@ class _PersonelsState extends State<Personels> {
                                           children: [
                                             Expanded(
                                                 child:
-                                                rowInfo_2( 'موبایل',  widget.Customer_temps2[item].cell)),
+                                                rowInfo_2( 'موبایل',  Customer_temps3[item].cell)),
                                             Container(width: 2, color: ColorLine,),
                                             Expanded(
                                                 child:
-                                                rowInfo_2( 'تلفن 2',  widget.Customer_temps2[item].tell2)),
+                                                rowInfo_2( 'تلفن 2',  Customer_temps3[item].tell2)),
                                             Container(width: 2, color: ColorLine,),
                                             Expanded(
                                                 child:
-                                                rowInfo_2( 'تلفن ۱',  widget.Customer_temps2[item].tell1)),
+                                                rowInfo_2( 'تلفن ۱',  Customer_temps3[item].tell1)),
                                           ],
                                         )
-
                                       ],
                                     ),
                                   ),

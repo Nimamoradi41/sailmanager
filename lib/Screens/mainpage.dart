@@ -1,6 +1,8 @@
 
+
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:sailmanager/ApiService.dart';
@@ -201,7 +203,7 @@ class _mainpageState extends State<mainpage> {
     return  WillPopScope(
       onWillPop: _onWillPop,
       child: Material(
-           child:  Container(
+          child:  Container(
              color: ColorBack,
              child: Stack(
                children: [
@@ -220,66 +222,69 @@ class _mainpageState extends State<mainpage> {
                  ),
                  Container(
                    margin: EdgeInsets.only(top:SizeApp.height*0.07),
-                   child: Column(
-                     mainAxisAlignment: MainAxisAlignment.start,
-                     children: [
-                       Image.asset('images/slma.png',   width: SizeApp.width*0.30,
-                           height: SizeApp.width*0.30),
-                       Text('گروه نرم افزاری آتیران',
-                         style: TextStyle(color: Color(0xff575757),
-                             fontSize: 16,
-                             fontWeight: FontWeight.bold),),
-                       BoxInput('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1),
-                       BoxInput('images/admin2.svg','نام کاربری خود را وارد کنید','نام کاربری',txt_2),
-                       BoxInput('images/ghofl.svg','کلمه عبور خود را وارد کنید','کلمه عبور',txt_3),
-                       Container(
-                         margin: EdgeInsets.symmetric(horizontal: 16),
-                         width: double.infinity,
-                         child: Row(
-                           mainAxisAlignment: MainAxisAlignment.end,
-                           children: [
-                             Expanded(child: Text(
-                               'مرا به خاطر بسپار',
-                               textAlign: TextAlign.end,
-                               style: TextStyle(
-                                   color: BaseColor,
-                                   fontSize: 16,
-                                   fontWeight: FontWeight.bold
-                               ),
-                             )),
-                             Theme(
-                               data: ThemeData(unselectedWidgetColor:  BaseColor),
-                               child: Checkbox(
-                                   value: Remember,
-                                   onChanged: (val){
-                                     setState(() {
-                                       Remember=!Remember;
-                                     });
-                                   }),
-                             )
-                           ],
-                         ),
-                       ),
-                       Container(
-                         width: double.infinity,
-                         margin: EdgeInsets.only(right: 16,left: 16,top: 32),
-                         child: ElevatedButton(onPressed: Run,
-                             style: ButtonStyle(
-                               backgroundColor: MaterialStateProperty.all(BaseColor),
-                               padding: MaterialStateProperty.all(EdgeInsets.all(14)),
-                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                     RoundedRectangleBorder(
-                                         borderRadius: BorderRadius.circular(24.0),
-
-                                     )
-                                 )
-                             ),
-                             child:Text('ورود',
-                           style: TextStyle(color:Colors.white,
+                   child: SingleChildScrollView(
+                     child: Column(
+                       mainAxisAlignment: MainAxisAlignment.start,
+                       children: [
+                         Image.asset('images/slma.png',   width: SizeApp.width*0.30,
+                             height: SizeApp.width*0.30),
+                         Text(
+                           'گروه نرم افزاری آتیران',
+                           style: TextStyle(color: Color(0xff575757),
                                fontSize: 16,
-                               fontWeight: FontWeight.bold),)),
-                       )
-                     ],
+                               fontWeight: FontWeight.bold),),
+                         BoxInput('images/svg_aser.svg','آدرس سرور خود را وارد کنید','آدرس سرور',txt_1,false),
+                         BoxInput('images/admin2.svg','نام کاربری خود را وارد کنید','نام کاربری',txt_2,false),
+                         BoxInput('images/ghofl.svg','کلمه عبور خود را وارد کنید','کلمه عبور',txt_3,true),
+                         Container(
+                           margin: EdgeInsets.symmetric(horizontal: 16),
+                           width: double.infinity,
+                           child: Row(
+                             mainAxisAlignment: MainAxisAlignment.end,
+                             children: [
+                               Expanded(child: Text(
+                                 'مرا به خاطر بسپار',
+                                 textAlign: TextAlign.end,
+                                 style: TextStyle(
+                                     color: BaseColor,
+                                     fontSize: 16,
+                                     fontWeight: FontWeight.bold
+                                 ),
+                               )),
+                               Theme(
+                                 data: ThemeData(unselectedWidgetColor:  BaseColor),
+                                 child: Checkbox(
+                                     value: Remember,
+                                     onChanged: (val){
+                                       setState(() {
+                                         Remember=!Remember;
+                                       });
+                                     }),
+                               )
+                             ],
+                           ),
+                         ),
+                         Container(
+                           width: double.infinity,
+                           margin: EdgeInsets.only(right: 16,left: 16,top: 32),
+                           child: ElevatedButton(onPressed: Run,
+                               style: ButtonStyle(
+                                 backgroundColor: MaterialStateProperty.all(BaseColor),
+                                 padding: MaterialStateProperty.all(EdgeInsets.all(14)),
+                                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                       RoundedRectangleBorder(
+                                           borderRadius: BorderRadius.circular(24.0),
+
+                                       )
+                                   )
+                               ),
+                               child:Text('ورود',
+                             style: TextStyle(color:Colors.white,
+                                 fontSize: 16,
+                                 fontWeight: FontWeight.bold),)),
+                         )
+                       ],
+                     ),
                    ),
                  ),
                  Positioned(
@@ -293,16 +298,10 @@ class _mainpageState extends State<mainpage> {
                    ),),
                  )
                ],
-
              ),
            )
-
       ),
     );
-
-
-
-
   }
 }
 
@@ -319,7 +318,10 @@ class BoxInput extends StatelessWidget {
    TextEditingController txtc;
 
 
-   BoxInput(this.Icone, this.Hint, this.Title,this.txtc);
+   bool Flag;
+
+
+   BoxInput(this.Icone, this.Hint, this.Title,this.txtc,this.Flag);
 
   @override
   Widget build(BuildContext context) {
@@ -353,6 +355,7 @@ class BoxInput extends StatelessWidget {
                 Expanded(child: TextField(
                   controller: txtc,
                   textAlign: TextAlign.end,
+                 obscureText: Flag,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(8),
               border: InputBorder.none,

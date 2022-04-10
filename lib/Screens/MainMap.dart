@@ -478,10 +478,10 @@ class _MainMapState extends State<MainMap> {
   late BitmapDescriptor markerbitmap;
   late BitmapDescriptor markerbitmap2;
   Future GetAll()async{
-    //   markerbitmap = await BitmapDescriptor.fromAssetImage(
-    //   ImageConfiguration(),
-    //   "images/loc_1.png",
-    // );
+      markerbitmap = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5),
+      "images/loc_1.png",
+    );
 
 
 
@@ -511,7 +511,7 @@ class _MainMapState extends State<MainMap> {
                  _Markers.add(
                      Marker(
                          markerId:MarkerId('MarkId'+element.lat.toString()+element.lng.toString()),
-                         // icon: markerbitmap,
+                         icon: markerbitmap2,
                          position: LatLng(element.lat,element.lng),
                          infoWindow: InfoWindow(
                              title: element.name,
@@ -538,11 +538,8 @@ class _MainMapState extends State<MainMap> {
 
     if(TypeSwitch_Now)
       {
-
-
         if(myperson.visRdf!=-9)
         {
-
           myperson_Markre=Marker(
               markerId:MarkerId('MarkId'+myperson.lat.toString()+myperson.lng.toString()),
               icon: markerbitmap2,
@@ -582,9 +579,29 @@ class _MainMapState extends State<MainMap> {
     updateMarkers();
     // Setm();
   }
+  Future Add(Latlng element,String Name,int counterr) async {
+    _Markers.add(
+        Marker(
+          // icon: pinLocationIcon,
+            markerId:MarkerId('MarkId'+element.lat.toString()+element.lng.toString()),
+            // markerId:MarkerId('MarkId'+uuid.v1().toString()),
+            position: LatLng(element.lat,element.lng),
+            icon: markerbitmap,
+            // visible: true,
+            // onTap: (){
+            //    controller2.showMarkerInfoWindow(scsc22);
+            //
+            // },
+            infoWindow: InfoWindow(
+              title:Name+" -- "+(counterr).toString(),
+              snippet: element.datetime,
+            )
+        ));
+  }
 
 
 
+  int CountLoc=0;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -631,182 +648,241 @@ class _MainMapState extends State<MainMap> {
            right: 0,
           child: Padding(
             padding: const EdgeInsets.all(6.0),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                GestureDetector(
-                    onTap: (){
-                      ShowModall_MainMenu();
-                    },
-                    child: BtnSmall('images/cate23.svg')),
-                GestureDetector(
-                  onTap: (){
-                    // ShowModall_();
-                    Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context)
-                            => PishFactorNotAccept()));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 6.0),
-                    child:  BtnSmall('images/pish.svg'),
+                CountLoc!=0?
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(' نقطه دریافت شد ',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(color:
+                        BaseColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),),
+                      Text(CountLoc.toString(),
+                        textAlign: TextAlign.end,
+                        style: TextStyle(color:
+                        BaseColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold),),
+                    ],
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 6),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 3,
-                              spreadRadius: 1
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(8)
+                ):Container(),
+
+                Row(
+                  children: [
+                    GestureDetector(
+                        onTap: (){
+                          ShowModall_MainMenu();
+                        },
+                        child: BtnSmall('images/cate23.svg')),
+                    GestureDetector(
+                      onTap: (){
+                        // ShowModall_();
+                        Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context)
+                                => PishFactorNotAccept()));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child:  BtnSmall('images/pish.svg'),
+                      ),
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(child: InkWell(
-                          onTap: () async{
-                            var resuilt=await    Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
-                            if(TypeSwitch_Now)
-                              {
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: 6),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 3,
+                                  spreadRadius: 1
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(8)
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(child: InkWell(
+                              onTap: () async{
+                                var resuilt=await    Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) => Personels(TypeSwitch_Now,Customer_temps2)));
+                                if(TypeSwitch_Now)
+                                  {
 
-                                if(resuilt!=null)
-                                {
-
-                                  if(myperson.visRdf!=-9)
+                                    if(resuilt!=null)
                                     {
-                                      _Markers.remove(myperson_Markre);
+
+                                      if(myperson.visRdf!=-9)
+                                        {
+                                          _Markers.remove(myperson_Markre);
+                                        }
+                                      // _Markers.clear();
+                                      myperson=resuilt;
+
+                                      _poly.clear();
+                                      _cordinate.clear();
+
+                                      if(myperson.lat>0)
+                                        {
+                                          var newPosition = CameraPosition(
+                                              target: LatLng(myperson.lat,myperson.lng),
+                                              zoom: 16);
+                                          CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
+                                          controller2.moveCamera(update);
+                                          myperson_Markre=Marker(
+                                              markerId:MarkerId(myperson.lat.toString()),
+                                              icon: markerbitmap2,
+                                              position: LatLng(myperson.lat,myperson.lng),
+                                              infoWindow: InfoWindow(
+                                                  title: myperson.name,
+                                                  snippet: myperson.datetime
+                                              )
+                                          );
+                                          _Markers.add(myperson_Markre);
+                                          setState(() {
+                                          });
+                                        }
+
+
                                     }
-                                  // _Markers.clear();
-                                  myperson=resuilt;
+                                  }else{
 
-                                  _poly.clear();
-                                  _cordinate.clear();
+                                   if(resuilt!=null)
+                                   {
 
-                                  if(myperson.lat>0)
-                                    {
-                                      var newPosition = CameraPosition(
-                                          target: LatLng(myperson.lat,myperson.lng),
-                                          zoom: 16);
-                                      CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
-                                      controller2.moveCamera(update);
-                                      myperson_Markre=Marker(
-                                          markerId:MarkerId(myperson.lat.toString()),
-                                          icon: markerbitmap2,
-                                          position: LatLng(myperson.lat,myperson.lng),
-                                          infoWindow: InfoWindow(
-                                              title: myperson.name,
-                                              snippet: myperson.datetime
-                                          )
-                                      );
-                                      _Markers.add(myperson_Markre);
-                                      setState(() {
-                                      });
-                                    }
+                                     _Markers.clear();
+                                     _poly.clear();
+                                     _cordinate.clear();
+                                     setState(() {
 
+                                     });
+                                     List<Latlng> d=resuilt ;
 
-                                }
-                              }else{
-
-                               if(resuilt!=null)
-                               {
-
-                                 _Markers.clear();
-                                 _poly.clear();
-                                 _cordinate.clear();
-                                 setState(() {
-
-                                 });
-                                 List<Latlng> d=resuilt ;
-
-                                 if(d!=null)
-                                 {
-                                   if(d.length>0)
+                                     if(d!=null)
                                      {
-                                       var newPosition = CameraPosition(
-                                           target: LatLng(d[0].lat,d[0].lng),
-                                           zoom: 16);
-                                       d.forEach((element) {
-
-                                         _cordinate.add(LatLng(element.lat,element.lng));
-                                       });
-                                       var uuid = Uuid();
-                                       _poly.add(
-                                           Polyline(
-                                             polylineId: PolylineId("route1"+uuid.v1().toString()),
-                                             patterns: [
-                                               PatternItem.dash(20.0),
-                                               PatternItem.gap(10)
-                                             ],
-                                             width: 4,
-                                             color: Colors.blue,
-                                             points: _cordinate,
-                                           )
-                                       );
-
-                                       d.forEach((element)
-                                       {
-                                         // print('MarkId'+uuid.v1().toString());
+                                       if(d.length>0)
+                                         {
+                                           CountLoc=d.length;
+                                           var newPosition = CameraPosition(
+                                               target: LatLng(d[0].lat,d[0].lng),
+                                               zoom: 16);
+                                           d.forEach((element) {
+                                             _cordinate.add(LatLng(element.lat,element.lng));
+                                           });
+                                           var uuid = Uuid();
+                                           _poly.add(
+                                               Polyline(
+                                                 polylineId: PolylineId("route1"+uuid.v1().toString()),
+                                                 patterns: [
+                                                   PatternItem.dash(20.0),
+                                                   PatternItem.gap(10)
+                                                 ],
+                                                 width: 4,
+                                                 color: Colors.blue,
+                                                 points: _cordinate,
+                                               )
+                                           );
 
 
-                                         _Markers.add(
-                                             Marker(
-                                                 // icon: pinLocationIcon,
-                                                 markerId:MarkerId('MarkId'+element.lat.toString()+element.lng.toString()),
-                                                 // markerId:MarkerId('MarkId'+uuid.v1().toString()),
-                                                 position: LatLng(element.lat,element.lng),
-                                                 // icon: markerbitmap,
-                                                 // visible: true,
-                                                 // onTap: (){
-                                                 //    controller2.showMarkerInfoWindow(scsc22);
-                                                 //
-                                                 // },
-                                                 infoWindow: InfoWindow(
-                                                     title:d[0].name,
-                                                     snippet: element.datetime,
 
-                                                 )
-                                             ));
-                                       });
 
-                                       CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
-                                       controller2.moveCamera(update);
-                                       setState(() {
 
-                                       });
+
+                                            int counterr=0;
+                                            d.forEach((element) async {
+                                               counterr=counterr+1;
+                                              markerbitmap = await  BitmapDescriptor.fromAssetImage(
+                                                ImageConfiguration(),
+                                                'images/loc44.png',
+                                              );
+                                            await  Add(element,d[0].name,counterr);
+                                            });
+
+                                           markerbitmap = await  BitmapDescriptor.fromAssetImage(
+                                             ImageConfiguration(),
+                                             "images/locnew1.png",
+                                           );
+                                            _Markers.add(
+                                            Marker(
+                                            // icon: pinLocationIcon,
+                                            markerId:MarkerId('MarkId'+d[d.length-1].lat.toString()+d[d.length-1].lng.toString()),
+                                            // markerId:MarkerId('MarkId'+uuid.v1().toString()),
+                                            position: LatLng(d[d.length-1].lat,d[d.length-1].lng),
+                                            icon: markerbitmap,
+                                            // visible: true,
+                                            // onTap: (){
+                                            //    controller2.showMarkerInfoWindow(scsc22);
+                                            //
+                                            // },
+                                            infoWindow: InfoWindow(
+                                            title:d[0].name,
+                                            snippet: d[d.length-1].datetime,
+
+                                            )
+                                ));
+
+                                           markerbitmap = await  BitmapDescriptor.fromAssetImage(
+                                               ImageConfiguration(),
+                                               // 'images/locnew1.png',
+                                             "images/locnew2.png",
+                                           );
+
+
+                                               _Markers.add(
+                                            Marker(
+                                            // icon: pinLocationIcon,
+                                            markerId:MarkerId('MarkId'+d[0].lat.toString()+d[0].lng.toString()),
+                                            // markerId:MarkerId('MarkId'+uuid.v1().toString()),
+                                            position: LatLng(d[0].lat,d[0].lng),
+                                            icon: markerbitmap,
+                                            infoWindow: InfoWindow(
+                                            // title:d[0].name+'('+'1'+')',
+                                            title:d[0].name,
+                                            snippet: d[0].datetime,
+                                               )
+                                            ));
+                                           CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
+                                           controller2.moveCamera(update);
+                                           setState(() {
+                                           });
+                                         }
                                      }
-                                 }
-                               }
-                            }
-                          },
-                          child: TextField(
-                            enabled: false,
-                            autofocus: false,
-                            textAlign: TextAlign.end,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xffBEBEBE),
-                                    fontSize: 14
+                                   }
+                                }
+                              },
+                              child: TextField(
+                                enabled: false,
+                                autofocus: false,
+                                textAlign: TextAlign.end,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintStyle: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xffBEBEBE),
+                                        fontSize: 14
+                                    ),
+                                    hintText: 'پرسنل خود را جستجو کنید'
                                 ),
-                                hintText: 'پرسنل خود را جستجو کنید'
-                            ),
-                          ),
-                        )),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: Icon(Icons.search,color: Color(0xffCACACA),size: 24,),
-                        )
-                      ],
-                    ),
-                  ),
-                )
+                              ),
+                            )),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: Icon(Icons.search,color: Color(0xffCACACA),size: 24,),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ),
@@ -854,6 +930,7 @@ class _MainMapState extends State<MainMap> {
                             if(!TypeSwitch_Now)
                               {
                                 setState(() {
+                                  CountLoc=0;
                                   TypeSwitch_Now=true;
                                   TypeSwitch_After=false;
                                   _Markers.clear();
