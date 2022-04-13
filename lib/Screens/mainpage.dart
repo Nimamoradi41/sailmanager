@@ -12,9 +12,10 @@ import 'package:sailmanager/teeeee.dart';
 import 'package:sailmanager/tetstst.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../ScreensArts/Art2.dart';
-
+// import 'package:local_auth/local_auth.dart';
 
 import '../Constants.dart';
+import 'LocalAuthApi.dart';
 import 'MainMap.dart';
 class mainpage extends StatefulWidget {
   @override
@@ -75,11 +76,6 @@ class _mainpageState extends State<mainpage> {
     {
        if(Login.res)
          {
-
-
-
-
-
            var Baseurl= await Conv_English(txt_1.text.toString());
            var UserName= await Conv_English(txt_2.text.toString());
            var Password= await Conv_English(txt_3.text.toString());
@@ -118,12 +114,15 @@ class _mainpageState extends State<mainpage> {
   var pr;
 
 
+
+  String Password="";
  Future  GetUser()async{
    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-   var base =prefs.getString('Baseurl');
-   var UserName =prefs.getString('UserName');
-   var login =prefs.getBool('Login');
+   var base =prefs.getString('Baseurl')!;
+   var UserName =prefs.getString('UserName')!;
+   Password =prefs.getString('Password')!;
+   var login =prefs.getBool('Login')!;
    if(prefs.getBool('Personels')!=null)
      {
        Personels =prefs.getBool('Personels')!;
@@ -131,20 +130,43 @@ class _mainpageState extends State<mainpage> {
 
 
 
-   if(base!=null)
+   if(prefs.getBool('Remember')!=null)
      {
-       txt_1.text=base;
-     }
-   if(login!=null)
-     {
-       Remember=login;
+       Remember=prefs.getBool('Remember')!;
+
+       if(Remember)
+         {
+
+           txt_1.text=base;
+
+           txt_2.text=UserName;
+           txt_3.text=Password;
+
+
+
+         }
      }
 
 
-   if(UserName!=null)
-   {
-     txt_2.text=UserName;
-   }
+
+
+
+
+
+
+
+   // var localAuth = LocalAuthentication();
+   // bool didAuthenticate =
+   // await localAuth.authenticate(
+   //     localizedReason: 'Please authenticate to show account balance');
+
+   // if(login!=null)
+   //   {
+   //     Remember=login;
+   //   }
+
+
+
 
 
 
@@ -152,6 +174,18 @@ class _mainpageState extends State<mainpage> {
    setState(() {
 
    });
+
+
+
+
+   if(Remember)
+     {
+       // bool d= await   LocalAuthApi.authenticate();
+       // if(d)
+       // {
+       //   Run();
+       // }
+     }
  }
 
 
@@ -190,9 +224,12 @@ class _mainpageState extends State<mainpage> {
   }
 
 
+
+
+
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pr = ProgressDialog(context,type: ProgressDialogType.Normal,isDismissible: false);
     GetUser();

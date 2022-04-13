@@ -580,6 +580,9 @@ class _MainMapState extends State<MainMap> {
     // Setm();
   }
   Future Add(Latlng element,String Name,int counterr) async {
+
+
+    print(element.datetime);
     _Markers.add(
         Marker(
           // icon: pinLocationIcon,
@@ -593,7 +596,7 @@ class _MainMapState extends State<MainMap> {
             //
             // },
             infoWindow: InfoWindow(
-              title:Name+" -- "+(counterr).toString(),
+              title:Name,
               snippet: element.datetime,
             )
         ));
